@@ -173,6 +173,27 @@ h2{font-size:20px;margin:0 0 8px;font-weight:900} h3{margin:0 0 6px;font-size:15
 .townopt.sel{border-color:var(--verm);background:#fff4ee;box-shadow:0 0 0 3px rgba(228,87,46,.13)}
 @media (prefers-color-scheme: dark){.townopt.sel{background:#3a241c}}
 @media(max-width:480px){.node{min-width:62px}.node b{font-size:11px}}
+/* ===== Gemini AI settings & chat ===== */
+.aistat{display:flex;align-items:center;gap:7px;flex-wrap:wrap;border:2px solid var(--line);border-radius:14px;padding:10px 12px;font-size:12.5px;font-weight:800;line-height:1.55;background:var(--card2)}
+.aistat .dotlive{width:10px;height:10px;border-radius:50%;background:#c3cdc8;flex:none}
+.aistat.on .dotlive{background:var(--green);box-shadow:0 0 0 4px rgba(34,160,107,.18)}
+.aistat button{margin-left:auto}
+.keyin,.modelsel{width:100%;border:2.5px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--card2);color:var(--ink);font-size:14px;font-weight:700;min-height:50px}
+.keyin:focus,.modelsel:focus{outline:3px solid rgba(15,118,110,.3);border-color:var(--teal)}
+.setlabel{font-size:12px;font-weight:900;letter-spacing:.06em;color:var(--teal);margin:16px 0 7px}
+.setrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.setrow .btn{flex:1;min-width:130px}
+.tokbox{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.tokbox .stat b{font-size:17px}
+.chatin{display:flex;gap:8px;margin-top:10px}
+.chatin input{flex:1;border:2.5px solid var(--line);border-radius:14px;padding:12px 13px;font-size:15px;background:var(--card2);color:var(--ink);min-height:50px;min-width:0}
+.chatin input:focus{outline:3px solid rgba(15,118,110,.3);border-color:var(--teal)}
+.chatin .btn{width:auto;padding:12px 18px;flex:none}
+.msg.typing{opacity:.75}
+.msg .tk{display:block;margin-top:6px;font-size:10.5px;font-weight:800;opacity:.65}
+.gearbtn{border:2px solid var(--line);background:var(--gold-l);color:var(--ink);font-weight:900;font-size:12.5px;border-radius:999px;padding:7px 11px;min-height:36px;white-space:nowrap}
+.setupai{margin-top:16px;border:2px dashed var(--teal);border-radius:16px;padding:13px 14px;background:var(--card2)}
+.setupai b{font-size:14px} .setupai p{font-size:12.5px;color:var(--ink2);line-height:1.65;margin:5px 0 10px}
 </style>
 </head>
 <body>
@@ -186,6 +207,7 @@ h2{font-size:20px;margin:0 0 8px;font-weight:900} h3{margin:0 0 6px;font-size:15
       <span class="chip">🪙 <span id="coins">120</span></span>
       <span class="chip blue">Lv.<span id="level">1</span></span>
       <span class="chip green">⚡<span id="stamina">5</span></span>
+      <button class="gearbtn" id="aiSetBtnTop" type="button">🤖 AI設定</button>
     </div>
   </div>
 
@@ -194,7 +216,7 @@ h2{font-size:20px;margin:0 0 8px;font-weight:900} h3{margin:0 0 6px;font-size:15
     <div class="hero">
       <h1>英語で旅する、<br>日本制覇の冒険。</h1>
       <p>単語を覚えながら市町村を制覇していくRPG。道中で4択クイズ、関所ではスペル入力のボス戦。忘れた頃に復習クエストが届くから、覚えた単語が本当に身につく。</p>
-      <div class="badges"><span>🗾 全国<span id="heroTotal">1,347</span>市町村を収録</span><span>📚 中学英語〜旅行英会話</span><span>🐾 AI相棒つき</span></div>
+      <div class="badges"><span>🗾 全国<span id="heroTotal">1,347</span>市町村を収録</span><span>📚 中学英語〜旅行英会話</span><span>🐾 Gemini AI相棒つき（キー設定で実動作）</span></div>
     </div>
 
     <div class="label">STEP 1 ｜ 始まりの地を選ぼう（全国<span id="totalCount">1,347</span>市町村）</div>
@@ -214,6 +236,13 @@ h2{font-size:20px;margin:0 0 8px;font-weight:900} h3{margin:0 0 6px;font-size:15
     <div class="grid2" id="petPick">
       <button class="pick sel" data-pet="dog"><span class="big">🐶</span><b>ポチ丸（犬）</b><small>元気いっぱい。「わん！」と励ましてくれる熱血タイプ。</small></button>
       <button class="pick" data-pet="cat"><span class="big">🐱</span><b>ミケ（猫）</b><small>マイペースで賢い。ヒントの出し方が絶妙な参謀タイプ。</small></button>
+    </div>
+
+    <div class="setupai">
+      <b>🤖 AI相棒は本物のGeminiで動きます</b>
+      <p>Google AI Studioで取得した <b>Gemini APIキー</b> を設定すると、相棒チャットが実際にGeminiへ送信され、AIの回答とトークン使用量が表示されます。キーはこのページを開いている間だけ保持され、Google（Gemini API）以外には送信されません。未設定の間はデモ回答になります。</p>
+      <button class="btn btn-teal btn-sm" id="aiSetBtnSetup" type="button" style="width:100%">🔑 Gemini APIキーを設定する</button>
+      <p class="small" id="setupAiStatus" style="margin:8px 0 0">状態：未設定（デモ回答モード）</p>
     </div>
 
     <div style="margin-top:20px"><button class="btn btn-pri" id="startBtn">🗾 冒険をはじめる</button></div>
@@ -260,7 +289,9 @@ h2{font-size:20px;margin:0 0 8px;font-weight:900} h3{margin:0 0 6px;font-size:15
       <button data-open="grammar"><span class="ic" style="background:#e6f3ff">📘</span><span><b>旅の文法ガイド</b><small>図解スライドでサクッと</small></span></button>
       <button data-open="shop"><span class="ic" style="background:#fef3c7">🛒</span><span><b>ショップ</b><small>着せ替え＆お助けアイテム</small></span></button>
       <button data-open="pets"><span class="ic" style="background:#e7f8ef">🐾</span><span><b>おとも図鑑</b><small>ご当地動物とスキル</small></span></button>
-      <button data-open="chat"><span class="ic" style="background:#ffe9e2">💬</span><span><b>相棒に質問</b><small>わからない所を聞ける</small></span></button>
+      <button data-open="chat"><span class="ic" style="background:#ffe9e2">💬</span><span><b>相棒に質問</b><small>Gemini AIが実際に回答</small></span></button>
+      <button data-open="settings"><span class="ic" style="background:#e8e4ff">🤖</span><span><b>AI設定（Gemini）</b><small id="menuAiStatus">未設定：デモ回答中</small></span></button>
+      <button data-open="chat"><span class="ic" style="background:#e6f3ff">✍️</span><span><b>AIに単語を聞く</b><small>今の単語をチャットで深掘り</small></span></button>
     </div>
   </section>
 
@@ -385,6 +416,10 @@ h2{font-size:20px;margin:0 0 8px;font-weight:900} h3{margin:0 0 6px;font-size:15
 
 <div class="overlay" id="ov-chat"><div class="sheet">
   <h2><span id="chatTitle">💬 相棒に質問</span> <button class="xbtn" data-close>✕</button></h2>
+  <div class="aistat" id="chatAiStatus">
+    <span class="dotlive"></span><span id="chatAiStatusText">Gemini未設定：デモ回答中です。キー設定で本物のAI回答になります。</span>
+    <button class="btn btn-teal btn-sm" type="button" data-open="settings">🔑 キー設定</button>
+  </div>
   <div class="chatlog" id="chatLog"></div>
   <div class="qbtns" id="qBtns">
     <button data-q="last">さっきの単語を説明して</button>
@@ -392,6 +427,45 @@ h2{font-size:20px;margin:0 0 8px;font-weight:900} h3{margin:0 0 6px;font-size:15
     <button data-q="study">効率のいい覚え方は？</button>
     <button data-q="motivate">やる気が出ない…</button>
   </div>
+  <div class="chatin">
+    <input id="chatInput" type="text" placeholder="英語の質問を自由に入力…（例：過去形の作り方を教えて）" autocomplete="off" maxlength="500">
+    <button class="btn btn-pri" id="chatSend" type="button">送信</button>
+  </div>
+  <p class="small" style="margin-top:8px">送信すると、入力内容と旅の状況（現在地・直近の単語など）が Gemini API に送られます。回答の下には実際に使ったトークン数が表示されます。</p>
+</div></div>
+
+<div class="overlay" id="ov-settings"><div class="sheet">
+  <h2>🤖 AI設定（Gemini） <button class="xbtn" data-close>✕</button></h2>
+  <p class="sub">相棒チャットを本物のAIで動かすための設定です。Google AI Studioで無料で取得できる <b>Gemini APIキー</b> を使います。</p>
+
+  <div class="aistat" id="setAiStatus"><span class="dotlive"></span><span id="setAiStatusText">未設定：デモ回答モード</span></div>
+
+  <div class="setlabel">GEMINI APIキー</div>
+  <input class="keyin" id="geminiKeyInput" type="password" placeholder="AIza… で始まるキーを貼り付け" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <p class="small" style="margin-top:7px">キーの取得先：<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio（APIキー作成）</a>。キーはこのページを開いている間だけメモリに保持され、保存されません。ページを閉じたり再読み込みしたりすると再入力が必要です。Gemini API以外へは送信されません。</p>
+
+  <div class="setlabel">使用モデル</div>
+  <select class="modelsel" id="geminiModelSel">
+    <option value="gemini-2.0-flash" selected>gemini-2.0-flash（高速・無料枠あり）</option>
+    <option value="gemini-2.0-flash-lite">gemini-2.0-flash-lite（最速・軽量）</option>
+    <option value="gemini-1.5-flash">gemini-1.5-flash（安定版）</option>
+    <option value="gemini-2.5-flash">gemini-2.5-flash（高性能）</option>
+  </select>
+
+  <div class="setrow">
+    <button class="btn btn-pri btn-sm" id="geminiSaveBtn" type="button">このキーで接続する</button>
+    <button class="btn btn-teal btn-sm" id="geminiTestBtn" type="button">接続テスト</button>
+    <button class="btn btn-ghost btn-sm" id="geminiClearBtn" type="button">キーを消去</button>
+  </div>
+  <p class="small" id="geminiTestResult" style="margin-top:9px"></p>
+
+  <div class="setlabel">このセッションのトークン使用量（Gemini実績）</div>
+  <div class="tokbox">
+    <div class="stat"><b id="tokIn">0</b><span>入力トークン</span></div>
+    <div class="stat"><b id="tokOut">0</b><span>出力トークン</span></div>
+    <div class="stat"><b id="tokTotal">0</b><span>合計</span></div>
+  </div>
+  <p class="small" style="margin-top:8px">回数：<b id="tokCalls">0</b> 回のAPI呼び出し ／ 数値はGemini APIの応答（usageMetadata）そのままです。課金・無料枠の消費は、キー発行元のGoogleアカウント側で発生します。</p>
 </div></div>
 
 <div class="overlay" id="ov-review"><div class="sheet">
@@ -704,7 +778,7 @@ $("reviewBtn").onclick=()=>{
  openModal("review");
 };
 /* ================= MODALS / SHOP / PETS / GRAMMAR / CHAT ================= */
-function openModal(name){document.querySelectorAll(".overlay").forEach(o=>o.classList.remove("on"));const el=$("ov-"+name);if(el)el.classList.add("on");if(name==="shop")renderShop();if(name==="pets")renderPets();if(name==="chat")renderChat()}
+function openModal(name){document.querySelectorAll(".overlay").forEach(o=>o.classList.remove("on"));const el=$("ov-"+name);if(el)el.classList.add("on");if(name==="shop")renderShop();if(name==="pets")renderPets();if(name==="chat")renderChat();if(name==="settings")syncAiUI()}
 function closeModals(){document.querySelectorAll(".overlay").forEach(o=>o.classList.remove("on"))}
 document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openModal(b.dataset.open));
 document.querySelectorAll("[data-close]").forEach(b=>b.onclick=closeModals);
@@ -743,24 +817,164 @@ function renderGrammar(){
 $("gPrev").onclick=()=>{gIdx=Math.max(0,gIdx-1);renderGrammar()};
 $("gNext").onclick=()=>{gIdx=Math.min(GRAMMAR[gTopic].length-1,gIdx+1);renderGrammar()};
 renderGrammar();
-/* chat */
+/* ================= GEMINI AI ================= */
+let geminiKey="";            /* メモリ内のみ保持。保存はしない */
+let geminiModel="gemini-2.0-flash";
+let chatHistory=[];          /* {role:"user"|"model", text} */
+let tokStats={calls:0,in:0,out:0,total:0};
+let aiBusy=false;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function fmtAi(text){
+ let h=esc(text);
+ h=h.replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>").replace(/`([^`]+)`/g,'<span class="en">$1</span>').replace(/\n/g,"<br>");
+ return h;
+}
+function aiConnected(){return geminiKey.trim().length>10}
+function syncAiUI(){
+ const on=aiConnected();
+ const st=on?`接続中：${geminiModel} ／ 累計 ${tokStats.total.toLocaleString()} トークン使用`:"未設定：デモ回答モード";
+ const cs=$("chatAiStatus"); if(cs){cs.classList.toggle("on",on);$("chatAiStatusText").textContent=on?`Gemini接続済み（${geminiModel}）。質問は実際にAIへ送信されます。累計 ${tokStats.total.toLocaleString()} トークン使用。`:"Gemini未設定：デモ回答中です。キー設定で本物のAI回答になります。"}
+ const ss=$("setAiStatus"); if(ss){ss.classList.toggle("on",on);$("setAiStatusText").textContent=st}
+ const su=$("setupAiStatus"); if(su)su.textContent="状態："+st;
+ const ms=$("menuAiStatus"); if(ms)ms.textContent=on?`接続中：${geminiModel}`:"未設定：デモ回答中";
+ $("tokIn").textContent=tokStats.in.toLocaleString();
+ $("tokOut").textContent=tokStats.out.toLocaleString();
+ $("tokTotal").textContent=tokStats.total.toLocaleString();
+ $("tokCalls").textContent=tokStats.calls;
+ const inp=$("geminiKeyInput"); if(inp&&document.activeElement!==inp)inp.value=geminiKey;
+ const sel=$("geminiModelSel"); if(sel)sel.value=geminiModel;
+}
+function systemPrompt(){
+ const t=townAt(S.townIdx);
+ const w=quiz.lastWord||t.words[0];
+ const persona=S.pet==="dog"
+  ? "あなたは犬のAI相棒「ポチ丸」。元気で熱血、語尾に時々「わん！」。短めに励ましながら教える。"
+  : "あなたは猫のAI相棒「ミケ」。マイペースで賢い参謀タイプ。落ち着いて、的確なヒントを出す。";
+ return persona+`
+これは英語学習RPGの相棒チャットです。学習者は日本の中学生〜英語をやり直す大人です。
+ルール：
+- 回答は日本語で、原則250字以内。長くなりそうなら要点を絞る。
+- 英語の例文を必ず1つ入れ、例文には日本語訳を添える。
+- 文法は「図やイメージ」で例えるなど、視覚的にわかりやすく。
+- 励ましを一言添える。絵文字は最大2つまで。
+- 質問と関係ない話題は、やんわり英語学習に戻す。
+現在の旅の状況：
+- 現在地：${t.pref} ${t.name}（制覇済み ${S.conquered.length} / ${ALL.length} 市町村）
+- 旅の目的：${{study:"学習ガチ勢",balance:"バランス",travel:"旅行会話"}[S.goal]||"バランス"}
+- 直近で学んだ単語：${w.en}（${w.jp}／${w.pos}）例文：${w.ex}
+- 所持コイン：${S.coins}、レベル：${S.level}`;
+}
+async function callGemini(userText){
+ const key=geminiKey.trim();
+ const url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(key)}`;
+ const contents=chatHistory.slice(-10).map(m=>({role:m.role,parts:[{text:m.text}]}));
+ contents.push({role:"user",parts:[{text:userText}]});
+ const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+  system_instruction:{parts:[{text:systemPrompt()}]},
+  contents,
+  generationConfig:{temperature:0.7,maxOutputTokens:600}
+ })});
+ let data=null; try{data=await res.json()}catch(e){}
+ if(!res.ok){
+  const msg=(data&&data.error&&data.error.message)||("HTTP "+res.status);
+  const err=new Error(msg); err.status=res.status; throw err;
+ }
+ const parts=(data&&data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts)||[];
+ const text=parts.map(p=>p.text||"").join("").trim();
+ if(!text)throw new Error("AIから空の回答が返りました");
+ const u=data.usageMetadata||{};
+ const usage={in:u.promptTokenCount||0,out:u.candidatesTokenCount||0,total:u.totalTokenCount||((u.promptTokenCount||0)+(u.candidatesTokenCount||0))};
+ tokStats.calls++; tokStats.in+=usage.in; tokStats.out+=usage.out; tokStats.total+=usage.total;
+ chatHistory.push({role:"user",text:userText},{role:"model",text});
+ return {text,usage};
+}
+function geminiErrorText(e){
+ const m=String((e&&e.message)||e||"");
+ if(e&&e.status===400&&/API key not valid/i.test(m))return "APIキーが正しくないようです。AI Studioで発行したキーを、余分な空白なしで貼り直してみてください。";
+ if(e&&e.status===400)return "リクエストが拒否されました（400）。モデル名や入力内容を確認してください。詳細："+m;
+ if(e&&e.status===403)return "アクセスが拒否されました（403）。このキーでGemini APIが有効になっているか確認してください。";
+ if(e&&e.status===429)return "利用枠の上限に達しました（429）。少し待ってから再試行するか、AI Studioで利用状況を確認してください。";
+ if(e&&e.status>=500)return "Gemini側で一時的なエラーが発生しました。少し待って再試行してください。";
+ if(/Failed to fetch|NetworkError/i.test(m))return "通信に失敗しました。ネット接続を確認して再試行してください。";
+ return "エラーが発生しました："+m;
+}
+/* デモ回答（キー未設定・エラー時のみ） */
+function cannedAnswer(text){
+ const w=quiz.lastWord||townAt(S.townIdx).words[0];
+ if(/単語|さっき/.test(text))return `「<b class="en">${w.en}</b>」は${w.jp}（${w.pos}）だよ。例文：<span class="en">${w.ex}</span> 声に出して3回読む＋例文ごと覚えるのがコツ。これでボス戦のスペルも思い出しやすくなるよ！`;
+ if(/be動詞|一般動詞/.test(text))return `いい質問！ <b>be動詞</b>は「＝」でつなぐ言葉（I am a student.＝私は生徒）。<b>一般動詞</b>は「動き」を表す言葉（I play soccer.）。迷ったら「＝で言える？ 動きがある？」で見分けてみて。文法ガイドにも図解があるよ📘`;
+ if(/覚え方|効率|勉強法/.test(text))return `おすすめはこのアプリの流れそのもの！ ①4択で意味を「認識」→ ②スペル入力で「定着」→ ③忘れた頃に復習で「完全マスター」。1日5分でも毎日続ける方が、週末に3時間より効くよ。`;
+ if(/やる気|疲れ|つらい/.test(text))return `そんな日もあるよね。今日は「1問だけ」でOKにしよう。小さく始めるのが続けるコツ。…ほら、1問解いたらもう今日のノルマ達成だよ。えらい！`;
+ return `ごめん、今はデモ回答モードだから、その質問には定番の答えしか出せないんだ。Gemini APIキーを設定すると、自由な質問にもAIが実際に答えるよ。「🔑 キー設定」からどうぞ。`;
+}
+/* ================= CHAT ================= */
 function renderChat(){
- $("chatTitle").textContent=`💬 ${petName()}に質問`;
+ $("chatTitle").textContent=`💬 ${petName()}に質問（Gemini）`;
+ syncAiUI();
  if($("chatLog").children.length===0){
-  $("chatLog").innerHTML=`<div class="msg pet">${petFace()} こんにちは！ わからない所があったら何でも聞いてね。今の旅の単語や文法なら、文脈つきで説明するよ。</div>`;
+  $("chatLog").innerHTML=`<div class="msg pet">${petFace()} こんにちは！ わからない所があったら何でも聞いてね。${aiConnected()?"今は本物のGeminiにつながっているよ。旅の状況も踏まえて答えるね！":"今はデモ回答中。キー設定をすると本物のGeminiが答えるよ。"}</div>`;
  }
 }
+function appendMsg(cls,html){
+ const log=$("chatLog"); const d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d); log.scrollTop=log.scrollHeight; return d;
+}
+async function sendChat(raw){
+ const text=(raw||"").trim(); if(!text||aiBusy)return;
+ appendMsg("me",esc(text));
+ if(!aiConnected()){
+  appendMsg("pet",petFace()+" "+cannedAnswer(text)+`<span class="tk">デモ回答（トークン消費なし）</span>`);
+  return;
+ }
+ aiBusy=true; $("chatSend").disabled=true;
+ const wait=appendMsg("pet typing",petFace()+" 考え中…（Geminiへ送信しています）");
+ try{
+  const r=await callGemini(text);
+  wait.classList.remove("typing");
+  wait.innerHTML=petFace()+" "+fmtAi(r.text)+`<span class="tk">Gemini ${esc(geminiModel)} ・ 今回 ${r.usage.total} トークン（入力 ${r.usage.in} / 出力 ${r.usage.out}）・ 累計 ${tokStats.total.toLocaleString()}</span>`;
+ }catch(e){
+  wait.classList.remove("typing");
+  wait.innerHTML=petFace()+" "+esc(geminiErrorText(e))+`<br><span class="small">参考までにデモ回答も置いておくね：</span><br>`+cannedAnswer(text)+`<span class="tk">APIエラー（この送信では回答トークンは消費されていません）</span>`;
+ }
+ aiBusy=false; $("chatSend").disabled=false; syncAiUI();
+ const log=$("chatLog"); log.scrollTop=log.scrollHeight;
+}
 document.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{
- const q=b.dataset.q; const log=$("chatLog");
  const labels={last:"さっきの単語を説明して",be:"be動詞と一般動詞の違いは？",study:"効率のいい覚え方は？",motivate:"やる気が出ない…"};
- log.innerHTML+=`<div class="msg me">${labels[q]}</div>`;
- let ans="";
- if(q==="last"){const w=quiz.lastWord||townAt(S.townIdx).words[0];ans=`${petFace()} 「<b class="en">${w.en}</b>」は${w.jp}（${w.pos}）だよ。例文：<span class="en">${w.ex}</span> ポイントは、声に出して3回読む＋例文ごと覚えること。これでボス戦のスペルも思い出しやすくなるよ！`}
- if(q==="be")ans=`${petFace()} いい質問！ <b>be動詞</b>は「＝」でつなぐ言葉（I am a student.＝私は生徒）。<b>一般動詞</b>は「動き」を表す言葉（I play soccer.）。迷ったら「＝で言える？ 動きがある？」で見分けてみて。文法ガイドにも図解があるよ📘`;
- if(q==="study")ans=`${petFace()} おすすめはこのアプリの流れそのもの！ ①4択で意味を「認識」→ ②スペル入力で「定着」→ ③忘れた頃に復習で「完全マスター」。1日5分でも毎日続ける方が、週末に3時間より効くよ。`;
- if(q==="motivate")ans=`${petFace()} そんな日もあるよね。今日は「1問だけ」でOKにしよう。小さく始めるのが続けるコツ。…ほら、1問解いたらもう今日のノルマ達成だよ。えらい！`;
- log.innerHTML+=`<div class="msg pet">${ans}</div>`; log.scrollTop=log.scrollHeight;
+ sendChat(labels[b.dataset.q]||b.textContent);
 });
+$("chatSend").onclick=()=>{const v=$("chatInput").value;$("chatInput").value="";sendChat(v)};
+$("chatInput").addEventListener("keydown",e=>{if(e.key==="Enter"){const v=$("chatInput").value;$("chatInput").value="";sendChat(v)}});
+/* ================= SETTINGS EVENTS ================= */
+$("aiSetBtnTop").onclick=()=>openModal("settings");
+$("aiSetBtnSetup").onclick=()=>openModal("settings");
+$("geminiModelSel").onchange=()=>{geminiModel=$("geminiModelSel").value;syncAiUI();toast("モデルを "+geminiModel+" に変更しました")};
+$("geminiSaveBtn").onclick=()=>{
+ const v=$("geminiKeyInput").value.trim();
+ if(v.length<=10){$("geminiTestResult").innerHTML="⚠️ キーが短すぎます。AI Studioで発行したキー全体を貼ってください。";return}
+ geminiKey=v; chatHistory=[];
+ $("geminiTestResult").innerHTML="✅ キーをセットしました（このページを開いている間のみ保持）。「接続テスト」で実際にGeminiへ1回送信して確認できます。";
+ syncAiUI(); toast("Geminiキーをセットしました");
+};
+$("geminiClearBtn").onclick=()=>{
+ geminiKey=""; chatHistory=[]; $("geminiKeyInput").value=""; $("geminiTestResult").textContent="キーを消去しました。デモ回答モードに戻ります。";
+ syncAiUI(); toast("APIキーを消去しました");
+};
+$("geminiTestBtn").onclick=async()=>{
+ const v=$("geminiKeyInput").value.trim();
+ if(v.length<=10){$("geminiTestResult").innerHTML="⚠️ 先にキーを入力してください。";return}
+ geminiKey=v; geminiModel=$("geminiModelSel").value;
+ const out=$("geminiTestResult"); out.textContent="⏳ Geminiへテスト送信中…（実際に少量のトークンを消費します）";
+ try{
+  const r=await callGemini("接続テストです。「接続OK」とだけ短く答えてください。");
+  out.innerHTML=`✅ 接続成功！ Geminiの回答：「${esc(r.text.slice(0,80))}」<br>今回の消費：合計 ${r.usage.total} トークン（入力 ${r.usage.in} / 出力 ${r.usage.out}）`;
+  chatHistory=[]; /* テスト会話は本編履歴に残さない */
+  toast("Gemini接続テスト成功！");
+ }catch(e){
+  out.innerHTML="❌ "+esc(geminiErrorText(e));
+ }
+ syncAiUI();
+};
+syncAiUI();
 syncTop();
 </script>
 </body>
