@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>英語学習RPG 日本制覇＆世界旅行</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e8f0e9; --bg2:#d9e8dc; --card:#fffdf6; --card2:#ffffff;
+  --ink:#1a2e28; --ink2:#5a6e66; --line:#d8e2d5;
+  --teal:#0f766e; --teal-d:#0b4f4a; --teal-l:#ccf0e8;
+  --verm:#e4572e; --verm-d:#c2431f; --gold:#e9a820; --gold-l:#fef3c7;
+  --green:#22a06b; --red:#e23e3e; --sky:#e6f3ff;
+  --shadow:0 10px 30px rgba(15,60,50,.14); --r:20px;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0d1f1c; --bg2:#0a1815; --card:#162e2a; --card2:#1a3631; --ink:#eef7f2; --ink2:#9db8ad; --line:#2a4a44; --teal-l:#123f3a; --gold-l:#3a2f10; --sky:#122a3d; --shadow:0 10px 30px rgba(0,0,0,.4); }
+}
+*{box-sizing:border-box} html,body{margin:0;padding:0}
+body{font-family:"M PLUS Rounded 1c",system-ui,sans-serif;background:radial-gradient(900px 500px at 15% -5%,#ffe9a8 0,transparent 55%),radial-gradient(800px 500px at 95% 0,#bfe8d8 0,transparent 50%),linear-gradient(180deg,var(--bg),var(--bg2));color:var(--ink);min-height:100vh}
+button,input,select{font:inherit} button{cursor:pointer}
+.en{font-family:"Nunito",sans-serif;letter-spacing:.02em}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 90px}
+@media(min-width:760px){.wrap{max-width:860px}}
+/* top bar */
+.topbar{position:sticky;top:10px;z-index:30;display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:7px 8px 7px 14px;box-shadow:var(--shadow)}
+.topbar .logo{font-weight:900;font-size:14px;white-space:nowrap}
+.topbar .logo span{color:var(--verm)}
+.pill{margin-left:auto;display:flex;gap:6px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:5px;background:var(--gold-l);border:1.5px solid #ecd27a;color:var(--ink);font-weight:800;font-size:13px;border-radius:999px;padding:6px 10px;min-height:36px}
+.chip.blue{background:var(--sky);border-color:#bcd8f5}
+.chip.green{background:var(--teal-l);border-color:#8fd8c8}
+.avatar-mini{width:38px;height:38px;border-radius:50%;background:var(--teal-l);display:grid;place-items:center;font-size:22px;border:2px solid var(--teal);flex:none}
+@media(max-width:520px){.topbar{flex-wrap:wrap;border-radius:20px;padding:8px 10px}.topbar .logo{font-size:12px}.avatar-mini{width:32px;height:32px;font-size:18px}.chip{font-size:12px;padding:5px 8px;min-height:32px}.pill{margin-left:0}}
+/* screens */
+.screen{display:none;animation:in .35s ease both} .screen.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.screen{animation:none}}
+h1{font-size:28px;line-height:1.25;margin:6px 0 8px;font-weight:900}
+h2{font-size:20px;margin:0 0 8px;font-weight:900} h3{margin:0 0 6px;font-size:15px}
+.sub{color:var(--ink2);font-size:14px;line-height:1.7;margin:0}
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.card+.card{margin-top:12px}
+/* setup */
+.hero{margin-top:14px;background:linear-gradient(135deg,#0f766e,#0b4f4a);color:#fff;border-radius:26px;padding:22px 18px;position:relative;overflow:hidden;border:none}
+.hero:after{content:"✦ ENGLISH QUEST ✦";position:absolute;right:-18px;top:14px;transform:rotate(18deg);background:var(--gold);color:#3a2703;font-weight:900;font-size:11px;padding:6px 22px;border-radius:4px;letter-spacing:.12em}
+.hero h1{color:#fff;font-size:30px} .hero p{color:#d7f3ec;line-height:1.7;font-size:14px;margin:0}
+.hero .badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.hero .badges span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.label{font-size:12px;font-weight:900;letter-spacing:.08em;color:var(--teal);margin:18px 0 8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px} .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+@media(max-width:480px){.grid3{grid-template-columns:1fr}}
+.pick{border:2.5px solid var(--line);background:var(--card2);border-radius:16px;padding:13px;text-align:left;min-height:52px;width:100%}
+.pick b{display:block;font-size:15px} .pick small{color:var(--ink2);line-height:1.5;display:block;margin-top:3px}
+.pick.sel{border-color:var(--verm);background:#fff4ee;box-shadow:0 0 0 3px rgba(228,87,46,.15)}
+@media (prefers-color-scheme: dark){.pick.sel{background:#3a241c}}
+.pick .big{font-size:30px;line-height:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:999px;font-weight:900;min-height:48px;padding:12px 20px;font-size:15px;width:100%}
+.btn-pri{background:var(--verm);color:#fff;box-shadow:0 6px 0 var(--verm-d)} .btn-pri:active{transform:translateY(4px);box-shadow:0 2px 0 var(--verm-d)}
+.btn-teal{background:var(--teal);color:#fff;box-shadow:0 6px 0 var(--teal-d)} .btn-teal:active{transform:translateY(4px);box-shadow:0 2px 0 var(--teal-d)}
+.btn-ghost{background:var(--card2);color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.btn-sm{min-height:42px;padding:9px 14px;font-size:13px;width:auto}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+/* map */
+.mapbox{margin-top:12px;background:linear-gradient(180deg,#fdf6d8,#e7f3d9);border:2px solid #d9cf9a;border-radius:22px;padding:14px;position:relative;overflow:hidden}
+@media (prefers-color-scheme: dark){.mapbox{background:linear-gradient(180deg,#24351f,#16281f);border-color:#3d5231}}
+.route{display:flex;align-items:flex-start;overflow-x:auto;padding:16px 2px 8px;gap:0;scrollbar-width:none}
+.route::-webkit-scrollbar{display:none}
+.node{display:flex;flex-direction:column;align-items:center;min-width:76px;position:relative;text-align:center}
+.node:not(:last-child):after{content:"";position:absolute;top:21px;left:calc(50% + 24px);width:calc(100% - 48px);border-top:3.5px dashed #b9a86a}
+.node.done:not(:last-child):after{border-top:3.5px solid var(--teal)}
+.dot{width:44px;height:44px;border-radius:50%;background:#fff;border:3px solid #cbbd7d;display:grid;place-items:center;font-size:20px;z-index:1;position:relative}
+.node.done .dot{background:var(--teal);border-color:var(--teal);color:#fff}
+.node.now .dot{background:var(--verm);border-color:#fff;box-shadow:0 0 0 4px var(--verm);color:#fff;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.node b{font-size:12px;margin-top:7px;line-height:1.3} .node small{font-size:10px;color:var(--ink2)}
+.node .st{font-size:10px;font-weight:900;margin-top:2px;color:var(--teal)} .node.now .st{color:var(--verm)}
+.speech{display:flex;gap:10px;align-items:flex-start}
+.petface{width:64px;height:64px;flex:none;border-radius:18px;background:var(--teal-l);display:grid;place-items:center;font-size:36px;border:2px solid var(--teal)}
+.bubble{background:var(--card2);border:2px solid var(--line);border-radius:16px;border-top-left-radius:4px;padding:11px 13px;font-size:14px;line-height:1.65;flex:1}
+.bubble b{color:var(--verm)}
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:11px 6px;text-align:center}
+.stat b{font-size:20px;display:block} .stat span{font-size:11px;color:var(--ink2);font-weight:700}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.menu button{display:flex;gap:10px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:13px;text-align:left;min-height:60px;color:var(--ink)}
+.menu .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;flex:none}
+.menu b{font-size:14px;display:block} .menu small{color:var(--ink2);font-size:11px}
+.badge-n{background:var(--red);color:#fff;font-size:11px;font-weight:900;border-radius:999px;padding:2px 7px;margin-left:4px}
+/* progress */
+.prog{height:14px;background:var(--line);border-radius:999px;overflow:hidden}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),#2fbf9b);border-radius:999px;transition:width .5s ease}
+.steps{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--ink2);margin-bottom:7px}
+/* quiz */
+.wordcard{margin-top:12px;text-align:center;background:var(--card);border:2px solid var(--line);border-radius:24px;padding:24px 16px 18px;box-shadow:var(--shadow);position:relative}
+.pos{display:inline-block;background:var(--gold-l);border:1.5px solid #ecd27a;font-size:11px;font-weight:900;padding:4px 10px;border-radius:999px}
+.word{font-size:44px;font-weight:900;margin:10px 0 2px;line-height:1.1}
+.phon{color:var(--ink2);font-size:14px}
+.soundbtn{margin-top:12px;background:var(--teal);color:#fff;border:none;border-radius:999px;padding:10px 18px;font-weight:900;min-height:44px}
+.choices{display:grid;gap:10px;margin-top:14px}
+.choice{background:var(--card2);border:2.5px solid var(--line);border-radius:16px;padding:15px 16px;font-size:16px;font-weight:800;text-align:left;min-height:56px;color:var(--ink);display:flex;align-items:center;gap:10px}
+.choice .k{width:28px;height:28px;border-radius:9px;background:var(--bg);display:grid;place-items:center;font-size:13px;flex:none;border:1.5px solid var(--line)}
+.choice.ok{border-color:var(--green);background:#e7f8ef} .choice.ng{border-color:var(--red);background:#fdecec}
+.choice.hide{opacity:.35;pointer-events:none}
+.feedback{margin-top:12px;border-radius:16px;padding:13px 15px;font-size:14px;line-height:1.7;display:none}
+.feedback.show{display:block} .feedback.ok{background:#e7f8ef;border:2px solid #9fe0bd} .feedback.ng{background:#fdecec;border:2px solid #f3b1b1}
+@media (prefers-color-scheme: dark){.feedback.ok{background:#123324}.feedback.ng{background:#3a1717}.choice.ok{background:#123324}.choice.ng{background:#3a1717}}
+.hearts{font-size:17px;letter-spacing:2px}
+/* boss */
+.bossbox{margin-top:12px;border-radius:24px;padding:18px 16px;text-align:center;background:linear-gradient(180deg,#2b1a3e,#4a1f2b);color:#fff;position:relative;overflow:hidden;border:3px solid #12081f}
+.bossbox:before{content:"⚠ 関所 ⚠";position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;letter-spacing:.2em;color:#ffb3a0}
+.monster{font-size:88px;line-height:1.15;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45));animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hpbar{height:16px;background:rgba(255,255,255,.18);border-radius:999px;overflow:hidden;border:1.5px solid rgba(255,255,255,.4)}
+.hpbar i{display:block;height:100%;background:linear-gradient(90deg,#ff5d5d,#ffb03a);transition:width .5s}
+.hpbar.me i{background:linear-gradient(90deg,#2fbf9b,#7be3c3)}
+.hint{font-size:30px;letter-spacing:.28em;font-weight:900;margin:8px 0}
+.spellin{display:flex;gap:8px;margin-top:12px}
+.spellin input{flex:1;border:2.5px solid var(--line);border-radius:14px;padding:13px 14px;font-size:19px;font-weight:800;background:var(--card2);color:var(--ink);min-height:52px;text-transform:lowercase}
+.spellin input:focus{outline:3px solid rgba(15,118,110,.35);border-color:var(--teal)}
+.shake{animation:shake .4s} @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,25,20,.62);z-index:60;display:none;align-items:flex-end;justify-content:center;padding:0}
+.overlay.on{display:flex}
+.sheet{background:var(--card);width:100%;max-width:520px;max-height:88vh;overflow-y:auto;border-radius:24px 24px 0 0;padding:20px 18px 26px;animation:up .3s ease both}
+@media(min-width:760px){.overlay{align-items:center;padding:18px}.sheet{border-radius:24px}}
+@keyframes up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+.sheet h2{display:flex;align-items:center;justify-content:space-between}
+.xbtn{background:var(--bg);border:2px solid var(--line);width:40px;height:40px;border-radius:50%;font-size:16px;color:var(--ink);flex:none}
+.shopitem,.petitem{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:16px;padding:12px;margin-top:10px;background:var(--card2)}
+.shopitem .ic,.petitem .ic{font-size:32px;width:52px;height:52px;border-radius:14px;background:var(--bg);display:grid;place-items:center;flex:none}
+.shopitem b,.petitem b{display:block;font-size:14px} .shopitem small,.petitem small{color:var(--ink2);font-size:12px;line-height:1.5;display:block}
+.buybtn{margin-left:auto;flex:none;background:var(--gold);border:none;font-weight:900;border-radius:999px;padding:10px 14px;min-height:44px;color:#3a2703}
+.buybtn:disabled{background:var(--line);color:var(--ink2)}
+.gslide{background:var(--sky);border:2px solid #bcd8f5;border-radius:18px;padding:18px;text-align:center;min-height:210px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.gslide .formula{font-size:21px;font-weight:900;line-height:1.6}
+.gslide .formula .hl{background:#ffe58a;border-radius:8px;padding:1px 8px;color:#4a3503}
+.gslide p{font-size:14px;line-height:1.75;margin:0;color:var(--ink)}
+.dots{display:flex;gap:6px;justify-content:center;margin:12px 0}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)} .dots i.on{background:var(--verm);width:22px;border-radius:99px}
+.chatlog{display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto;margin:10px 0}
+.msg{max-width:85%;padding:10px 13px;border-radius:15px;font-size:14px;line-height:1.65}
+.msg.pet{background:var(--teal-l);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.me{background:var(--verm);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.qbtns{display:flex;flex-wrap:wrap;gap:7px}
+.qbtns button{border:2px solid var(--teal);color:var(--teal);background:var(--card2);border-radius:999px;padding:9px 13px;font-weight:800;font-size:13px;min-height:42px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,80px);background:#12211d;color:#fff;font-weight:800;font-size:14px;padding:13px 20px;border-radius:999px;z-index:90;transition:transform .35s;box-shadow:var(--shadow);max-width:92vw;text-align:center}
+.toast.on{transform:translate(-50%,0)}
+.confetti{font-size:44px;text-align:center}
+.raid{margin-top:12px;background:linear-gradient(135deg,#571f4d,#8a2432);color:#fff;border-radius:20px;padding:15px;border:none}
+.raid .hpbar{margin-top:8px}
+.small{font-size:12px;color:var(--ink2);line-height:1.6}
+.footbar{position:fixed;bottom:0;left:0;right:0;z-index:40;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);border-top:2px solid var(--line);padding:9px 12px calc(9px + env(safe-area-inset-bottom))}
+.footbar .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+@media(min-width:760px){.footbar .in{max-width:860px}}
+.footbar button{background:none;border:none;color:var(--ink2);font-size:11px;font-weight:800;padding:7px 2px;min-height:48px;border-radius:12px}
+.footbar button .fi{font-size:20px;display:block}
+.footbar button.on{color:var(--verm);background:#fff1ea}
+@media (prefers-color-scheme: dark){.footbar button.on{background:#3a241c}}
+/* town picker */
+.searchin,.prefsel{width:100%;border:2.5px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--card2);color:var(--ink);font-size:15px;font-weight:700;min-height:50px}
+.prefsel{margin-top:9px}
+.searchin:focus,.prefsel:focus{outline:3px solid rgba(15,118,110,.3);border-color:var(--teal)}
+.townlist{margin-top:10px;max-height:264px;overflow-y:auto;display:grid;gap:7px;padding:3px}
+.townopt{display:flex;align-items:center;gap:9px;border:2px solid var(--line);background:var(--card2);border-radius:12px;padding:10px 12px;text-align:left;min-height:46px;color:var(--ink);font-size:14px;width:100%}
+.townopt .tright{margin-left:auto;display:flex;gap:6px;align-items:center;flex:none}
+.townopt small{color:var(--ink2);font-size:11px}
+.townopt .sp{background:var(--gold-l);border:1px solid #ecd27a;font-size:10px;font-weight:900;padding:2px 7px;border-radius:999px;white-space:nowrap;color:var(--ink)}
+.townopt.sel{border-color:var(--verm);background:#fff4ee;box-shadow:0 0 0 3px rgba(228,87,46,.13)}
+@media (prefers-color-scheme: dark){.townopt.sel{background:#3a241c}}
+@media(max-width:480px){.node{min-width:62px}.node b{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="avatar-mini" id="topPet">🐶</div>
+    <div class="logo">英語クエスト <span>日本制覇</span></div>
+    <div class="pill">
+      <span class="chip">🪙 <span id="coins">120</span></span>
+      <span class="chip blue">Lv.<span id="level">1</span></span>
+      <span class="chip green">⚡<span id="stamina">5</span></span>
+    </div>
+  </div>
+
+  <!-- ============ SETUP ============ -->
+  <section class="screen on" id="scr-setup">
+    <div class="hero">
+      <h1>英語で旅する、<br>日本制覇の冒険。</h1>
+      <p>単語を覚えながら市町村を制覇していくRPG。道中で4択クイズ、関所ではスペル入力のボス戦。忘れた頃に復習クエストが届くから、覚えた単語が本当に身につく。</p>
+      <div class="badges"><span>🗾 全国<span id="heroTotal">1,347</span>市町村を収録</span><span>📚 中学英語〜旅行英会話</span><span>🐾 AI相棒つき</span></div>
+    </div>
+
+    <div class="label">STEP 1 ｜ 始まりの地を選ぼう（全国<span id="totalCount">1,347</span>市町村）</div>
+    <input class="searchin" id="townSearch" type="search" placeholder="🔍 市町村名で検索（例：潮来・札幌・那覇）" autocomplete="off">
+    <select class="prefsel" id="prefSel" aria-label="都道府県を選ぶ"></select>
+    <div class="townlist" id="townList"></div>
+    <div class="card" id="startSummary" style="margin-top:10px;padding:13px 14px"></div>
+
+    <div class="label">STEP 2 ｜ 旅の目的は？</div>
+    <div class="grid3" id="goalPick">
+      <button class="pick" data-goal="study"><b>📖 学習ガチ勢</b><small>テスト対策中心。単語＋文法をしっかり。</small></button>
+      <button class="pick sel" data-goal="balance"><b>⚖️ バランス</b><small>単語も文法も、旅気分も全部ほどよく。</small></button>
+      <button class="pick" data-goal="travel"><b>✈️ 旅行会話</b><small>海外旅行で使えるフレーズ重視。</small></button>
+    </div>
+
+    <div class="label">STEP 3 ｜ AI相棒を選ぼう</div>
+    <div class="grid2" id="petPick">
+      <button class="pick sel" data-pet="dog"><span class="big">🐶</span><b>ポチ丸（犬）</b><small>元気いっぱい。「わん！」と励ましてくれる熱血タイプ。</small></button>
+      <button class="pick" data-pet="cat"><span class="big">🐱</span><b>ミケ（猫）</b><small>マイペースで賢い。ヒントの出し方が絶妙な参謀タイプ。</small></button>
+    </div>
+
+    <div style="margin-top:20px"><button class="btn btn-pri" id="startBtn">🗾 冒険をはじめる</button></div>
+    <p class="small" style="text-align:center;margin-top:10px">所要時間の目安：1エリア約3分 ／ 音声ボタンで発音も聞けます 🔊</p>
+  </section>
+
+  <!-- ============ MAP ============ -->
+  <section class="screen" id="scr-map">
+    <div class="mapbox">
+      <h2 style="font-size:16px" id="mapTitle">🗾 旅のマップ</h2>
+      <div class="route" id="route"></div>
+      <p class="small" id="mapProgress" style="margin-top:6px"></p>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="speech">
+        <div class="petface" id="mapPet">🐶</div>
+        <div class="bubble" id="mapSpeech"></div>
+      </div>
+      <div class="statrow">
+        <div class="stat"><b id="stTowns">0</b><span>制覇した町</span></div>
+        <div class="stat"><b id="stWords">0</b><span>覚えた単語</span></div>
+        <div class="stat"><b id="stStreak">1日</b><span>連続学習</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📍 次の目的地：<span id="nextTownName"></span></h3>
+      <p class="sub" id="nextTownDesc"></p>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btn-pri" id="departBtn" style="flex:1;min-width:180px">▶ 出発する（道中クイズへ）</button>
+        <button class="btn btn-ghost btn-sm" id="reviewBtn">🔁 復習クエスト <span class="badge-n" id="reviewCount">2</span></button>
+      </div>
+    </div>
+
+    <div class="raid card">
+      <b>👹 週末レイド：巨大スライム王</b>
+      <div style="font-size:12px;opacity:.9;margin-top:3px">全国のプレイヤーの正解数でダメージ！ 日曜 23:59 まで</div>
+      <div class="hpbar"><i style="width:38%"></i></div>
+      <div style="font-size:12px;margin-top:6px">みんなの正解 12,480 / 20,000 問 ・ あなたの貢献 0問（クイズ正解で加算）</div>
+    </div>
+
+    <div class="menu">
+      <button data-open="grammar"><span class="ic" style="background:#e6f3ff">📘</span><span><b>旅の文法ガイド</b><small>図解スライドでサクッと</small></span></button>
+      <button data-open="shop"><span class="ic" style="background:#fef3c7">🛒</span><span><b>ショップ</b><small>着せ替え＆お助けアイテム</small></span></button>
+      <button data-open="pets"><span class="ic" style="background:#e7f8ef">🐾</span><span><b>おとも図鑑</b><small>ご当地動物とスキル</small></span></button>
+      <button data-open="chat"><span class="ic" style="background:#ffe9e2">💬</span><span><b>相棒に質問</b><small>わからない所を聞ける</small></span></button>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="screen" id="scr-quiz">
+    <div style="margin-top:14px">
+      <div class="steps"><span id="quizStepLabel">道中クイズ 1 / 5</span><span><span class="hearts" id="quizHearts">❤️❤️❤️</span></span></div>
+      <div class="prog"><i id="quizProg" style="width:0%"></i></div>
+      <p class="small" style="margin-top:7px" id="quizRouteLabel"></p>
+    </div>
+
+    <div class="card" style="margin-top:10px;padding:12px 14px">
+      <div class="speech">
+        <div class="petface" id="quizPet" style="width:50px;height:50px;font-size:28px;border-radius:14px">🐶</div>
+        <div class="bubble" id="quizSpeech" style="font-size:13px"></div>
+      </div>
+    </div>
+
+    <div class="wordcard">
+      <span class="pos" id="qPos">名詞</span>
+      <div class="word en" id="qWord">library</div>
+      <div class="phon en" id="qPhon">/ ˈlaɪbrəri /</div>
+      <button class="soundbtn" id="speakBtn">🔊 発音を聞く</button>
+      <p style="font-weight:900;margin:16px 0 0">この単語の意味は？</p>
+    </div>
+
+    <div class="choices" id="choices"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn btn-teal btn-sm" id="skillBtn" style="flex:1">🐾 おともスキル：選択肢を2つ消す（残り <span id="skillLeft">2</span>）</button>
+      <button class="btn btn-ghost btn-sm" id="quitQuiz">マップへ戻る</button>
+    </div>
+    <button class="btn btn-pri" id="nextQBtn" style="display:none;margin-top:12px">次へ進む ▶</button>
+  </section>
+
+  <!-- ============ BOSS ============ -->
+  <section class="screen" id="scr-boss">
+    <div style="margin-top:14px">
+      <div class="steps"><span>関所ボス戦</span><span>あなたのライフ <span class="hearts" id="bossHearts">❤️❤️❤️</span></span></div>
+    </div>
+    <div class="bossbox">
+      <div class="monster" id="bossFace">👹</div>
+      <b id="bossName" style="font-size:18px"></b>
+      <p style="font-size:13px;opacity:.85;margin:5px 0 12px" id="bossTaunt"></p>
+      <div style="text-align:left;font-size:12px;font-weight:800;margin-bottom:5px">ボス HP</div>
+      <div class="hpbar"><i id="bossHp" style="width:100%"></i></div>
+      <div style="text-align:left;font-size:12px;font-weight:800;margin:12px 0 5px">あなた</div>
+      <div class="hpbar me"><i id="meHp" style="width:100%"></i></div>
+    </div>
+
+    <div class="card" style="margin-top:12px;text-align:center">
+      <p class="sub">道中で覚えた単語だよ。日本語を見て、英語のスペルを入力して攻撃！</p>
+      <div style="font-size:24px;font-weight:900;margin-top:8px" id="bossJp">図書館</div>
+      <div class="hint en" id="bossHint">l _ _ _ _ _ y</div>
+      <div class="phon en" style="color:var(--ink2)" id="bossPhon"></div>
+      <div class="spellin" id="spellWrap">
+        <input id="spellInput" class="en" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="スペルを入力…">
+        <button class="btn btn-pri" id="attackBtn" style="width:auto;padding:12px 20px">⚔️ 攻撃</button>
+      </div>
+      <div class="feedback" id="bossFeedback"></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn btn-ghost btn-sm" id="bossSpeak" style="flex:1">🔊 発音ヒントを聞く</button>
+        <button class="btn btn-ghost btn-sm" id="quitBoss">逃げる（マップへ）</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLEAR ============ -->
+  <section class="screen" id="scr-clear">
+    <div class="card" style="margin-top:14px;text-align:center;padding:28px 18px">
+      <div class="confetti">🎉🏯🎉</div>
+      <h1 style="font-size:26px"><span id="clearTown"></span> 制覇！</h1>
+      <p class="sub" id="clearMsg"></p>
+      <div class="statrow">
+        <div class="stat"><b id="clearCoins">+0</b><span>獲得コイン 🪙</span></div>
+        <div class="stat"><b id="clearWords">5</b><span>覚えた単語</span></div>
+        <div class="stat"><b id="clearPet">—</b><span>新しいおとも</span></div>
+      </div>
+      <div class="card" style="text-align:left;margin-top:14px;background:var(--gold-l);border-color:#ecd27a">
+        <b>🔁 復習クエスト予約</b>
+        <p class="small" style="color:var(--ink);margin-top:5px">忘却曲線に合わせて、今日の単語は <b>明日・3日後・7日後</b> に復習クエストで出題されます。スペルテストに再合格すると「完全マスター」になります。</p>
+      </div>
+      <button class="btn btn-pri" id="backMapBtn" style="margin-top:16px">🗾 マップに戻る</button>
+    </div>
+  </section>
+</div>
+
+<!-- FOOT NAV -->
+<nav class="footbar" id="footbar" style="display:none"><div class="in">
+  <button data-nav="map" class="on"><span class="fi">🗾</span>マップ</button>
+  <button data-open="grammar"><span class="fi">📘</span>文法</button>
+  <button data-open="pets"><span class="fi">🐾</span>おとも</button>
+  <button data-open="shop"><span class="fi">🛒</span>ショップ</button>
+</div></nav>
+
+<!-- MODALS -->
+<div class="overlay" id="ov-grammar"><div class="sheet">
+  <h2>📘 旅の文法ガイド <button class="xbtn" data-close>✕</button></h2>
+  <p class="sub">図解でサクッと理解。1テーマ3枚だけ。</p>
+  <div style="display:flex;gap:7px;margin:12px 0;flex-wrap:wrap" id="gTopics"></div>
+  <div class="gslide" id="gSlide"></div>
+  <div class="dots" id="gDots"></div>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-ghost btn-sm" id="gPrev" style="flex:1">← 前へ</button>
+    <button class="btn btn-teal btn-sm" id="gNext" style="flex:1">次へ →</button>
+  </div>
+  <button class="btn btn-pri" style="margin-top:10px" data-open="chat">💬 わからない所を相棒に聞く</button>
+</div></div>
+
+<div class="overlay" id="ov-shop"><div class="sheet">
+  <h2>🛒 ショップ <button class="xbtn" data-close>✕</button></h2>
+  <p class="sub">所持コイン：<b>🪙 <span id="shopCoins">0</span></b> ／ 学習で正解するとコインが貯まります。</p>
+  <div id="shopList"></div>
+</div></div>
+
+<div class="overlay" id="ov-pets"><div class="sheet">
+  <h2>🐾 おとも図鑑 <button class="xbtn" data-close>✕</button></h2>
+  <p class="sub">各地で救出したご当地動物。連れているおとものスキルがクイズで発動します。</p>
+  <div id="petList"></div>
+</div></div>
+
+<div class="overlay" id="ov-chat"><div class="sheet">
+  <h2><span id="chatTitle">💬 相棒に質問</span> <button class="xbtn" data-close>✕</button></h2>
+  <div class="chatlog" id="chatLog"></div>
+  <div class="qbtns" id="qBtns">
+    <button data-q="last">さっきの単語を説明して</button>
+    <button data-q="be">be動詞と一般動詞の違いは？</button>
+    <button data-q="study">効率のいい覚え方は？</button>
+    <button data-q="motivate">やる気が出ない…</button>
+  </div>
+</div></div>
+
+<div class="overlay" id="ov-review"><div class="sheet">
+  <h2>🔁 復習クエスト <button class="xbtn" data-close>✕</button></h2>
+  <p class="sub">忘れかけの単語をスペルテスト。再合格で「完全マスター」に近づきます。</p>
+  <div id="reviewBody"></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data:application/javascript;base64,d2luZG93LkpBUEFOX0RBVEE9W1siMDEiLCLljJfmtbfpgZMiLCLjg5vjg4PjgqvjgqTjg4njgqYiLCJob2trYWlkbyIsWyLmnK3luYzluILkuK3lpK7ljLoiLCLmnK3luYzluILljJfljLoiLCLmnK3luYzluILmnbHljLoiLCLmnK3luYzluILnmb3nn7PljLoiLCLmnK3luYzluILosYrlubPljLoiLCLmnK3luYzluILljZfljLoiLCLmnK3luYzluILopb/ljLoiLCLmnK3luYzluILljprliKXljLoiLCLmnK3luYzluILmiYvnqLLljLoiLCLmnK3luYzluILmuIXnlLDljLoiLCLlh73ppKjluIIiLCLlsI/mqL3luIIiLCLml63lt53luIIiLCLlrqTomK3luIIiLCLph6fot6/luIIiLCLluK/luoPluIIiLCLljJfopovluIIiLCLlpJXlvLXluIIiLCLlsqnopovmsqLluIIiLCLntrLotbDluIIiLCLnlZnokIzluIIiLCLoi6vlsI/niafluIIiLCLnqJrlhoXluIIiLCLnvo7llITluIIiLCLoiqbliKXluIIiLCLmsZ/liKXluIIiLCLotaTlubPluIIiLCLntIvliKXluIIiLCLlo6vliKXluIIiLCLlkI3lr4TluIIiLCLkuInnrKDluIIiLCLmoLnlrqTluIIiLCLljYPmrbPluIIiLCLmu53lt53luIIiLCLnoILlt53luIIiLCLmrYzlv5flhoXluIIiLCLmt7Hlt53luIIiLCLlr4zoia/ph47luIIiLCLnmbvliKXluIIiLCLmgbXluq3luIIiLCLkvIrpgZTluIIiLCLljJfluoPls7bluIIiLCLnn7Pni6nluIIiLCLljJfmlpfluIIiLCLnn7Pni6npg6EiLCLmnb7liY3pg6EiLCLkuIrno6/pg6EiLCLkuoDnlLDpg6EiLCLojIXpg6jpg6EiLCLkuozmtbfpg6EiLCLlsbHotorpg6EiLCLmqpzlsbHpg6EiLCLniL7lv5fpg6EiLCLlpaXlsLvpg6EiLCLngKzmo5rpg6EiLCLkuYXpgaDpg6EiLCLls7bniafpg6EiLCLlr7/pg73pg6EiLCLno6/osLfpg6EiLCLombvnlLDpg6EiLCLlsqnlhoXpg6EiLCLlj6Tlrofpg6EiLCLnqY3kuLnpg6EiLCLlj6TlubPpg6EiLCLkvZnluILpg6EiLCLnqbrnn6Xpg6EiLCLlpJXlvLXpg6EiLCLmqLrmiLjpg6EiLCLpm6jnq5zpg6EiLCLkuIrlt53pg6EiLCLli4fmiZXpg6EiLCLkuK3lt53pg6EiLCLlopfmr5vpg6EiLCLnlZnokIzpg6EiLCLoi6vliY3pg6EiLCLlpKnloanpg6EiLCLlrpfosLfpg6EiLCLmnp3lubjpg6EiLCLnpLzmlofpg6EiLCLliKnlsLvpg6EiLCLntrLotbDpg6EiLCLmlpzph4zpg6EiLCLluLjlkYLpg6EiLCLntIvliKXpg6EiLCLombvnlLDpg6EiLCLmnInnj6Dpg6EiLCLnmb3ogIHpg6EiLCLmspnmtYHpg6EiLCLmlrDlhqDpg6EiLCLmtabmsrPpg6EiLCLmp5jkvLzpg6EiLCLluYzms4npg6EiLCLml6Xpq5jpg6EiLCLmsrPmnbHpg6EiLCLmsrPopb/pg6EiLCLluoPlsL7pg6EiLCLotrPlr4Tpg6EiLCLljYHli53pg6EiLCLph6fot6/pg6EiLCLljprlsrjpg6EiLCLlt53kuIrpg6EiLCLpmL/lr5Lpg6EiLCLnmb3ns6Dpg6EiLCLph47ku5jpg6EiLCLmqJnmtKXpg6EiLCLnm67moqjpg6EiXV0sWyIwMiIsIumdkuajruecjCIsIuOCouOCquODouODquOCseODsyIsImFvbW9yaSIsWyLpnZLmo67luIIiLCLlvJjliY3luIIiLCLlhavmiLjluIIiLCLpu5Lnn7PluIIiLCLkupTmiYDlt53ljp/luIIiLCLljYHlkoznlLDluIIiLCLkuInmsqLluIIiLCLjgoDjgaTluIIiLCLjgaTjgYzjgovluIIiLCLlubPlt53luIIiLCLmnbHmtKXou73pg6EiLCLopb/mtKXou73pg6EiLCLkuK3mtKXou73pg6EiLCLljZfmtKXou73pg6EiLCLljJfmtKXou73pg6EiLCLkuIrljJfpg6EiLCLkuIvljJfpg6EiLCLkuInmiLjpg6EiXV0sWyIwMyIsIuWyqeaJi+ecjCIsIuOCpOODr+ODhuOCseODsyIsIml3YXRlIixbIuebm+WyoeW4giIsIuWuruWPpOW4giIsIuWkp+iIuea4oeW4giIsIuiKseW3u+W4giIsIuWMl+S4iuW4giIsIuS5heaFiOW4giIsIumBoOmHjuW4giIsIuS4gOmWouW4giIsIumZuOWJjemrmOeUsOW4giIsIumHnOefs+W4giIsIuS6jOaIuOW4giIsIuWFq+W5oeW5s+W4giIsIuWlpeW3nuW4giIsIua7neayouW4giIsIuWyqeaJi+mDoSIsIue0q+azoumDoSIsIuWSjOizgOmDoSIsIuiDhuayoumDoSIsIuilv+ejkOS6lemDoSIsIuawl+S7memDoSIsIuS4iumWieS8iumDoSIsIuS4i+mWieS8iumDoSIsIuS5neaIuOmDoSIsIuS6jOaIuOmDoSJdXSxbIjA0Iiwi5a6u5Z+O55yMIiwi44Of44Ok44Ku44Kx44OzIiwibWl5YWdpIixbIuS7meWPsOW4gumdkuiRieWMuiIsIuS7meWPsOW4guWuruWfjumHjuWMuiIsIuS7meWPsOW4guiLpeael+WMuiIsIuS7meWPsOW4guazieWMuiIsIuefs+W3u+W4giIsIuWhqeeriOW4giIsIuawl+S7meayvOW4giIsIueZveefs+W4giIsIuWQjeWPluW4giIsIuinkueUsOW4giIsIuWkmuizgOWfjuW4giIsIuWyqeayvOW4giIsIueZu+exs+W4giIsIuagl+WOn+W4giIsIuadseadvuWztuW4giIsIuWkp+W0juW4giIsIuWvjOiwt+W4giIsIuWIiOeUsOmDoSIsIuaftOeUsOmDoSIsIuS8iuWFt+mDoSIsIuS6mOeQhumDoSIsIuWuruWfjumDoSIsIum7kuW3nemDoSIsIuWKoOe+jumDoSIsIumBoOeUsOmDoSIsIueJoem5v+mDoSIsIuacrOWQiemDoSJdXSxbIjA1Iiwi56eL55Sw55yMIiwi44Ki44Kt44K/44Kx44OzIiwiYWtpdGEiLFsi56eL55Sw5biCIiwi6IO95Luj5biCIiwi5qiq5omL5biCIiwi5aSn6aSo5biCIiwi55S36bm/5biCIiwi5rmv5rKi5biCIiwi6bm/6KeS5biCIiwi55Sx5Yip5pys6I2Y5biCIiwi5r2f5LiK5biCIiwi5aSn5LuZ5biCIiwi5YyX56eL55Sw5biCIiwi44Gr44GL44G75biCIiwi5LuZ5YyX5biCIiwi6bm/6KeS6YOhIiwi5YyX56eL55Sw6YOhIiwi5bGx5pys6YOhIiwi5Y2X56eL55Sw6YOhIiwi5LuZ5YyX6YOhIiwi6ZuE5Yud6YOhIl1dLFsiMDYiLCLlsbHlvaLnnIwiLCLjg6Tjg57jgqzjgr/jgrHjg7MiLCJ5YW1hZ2F0YSIsWyLlsbHlvaLluIIiLCLnsbPmsqLluIIiLCLptrTlsqHluIIiLCLphZLnlLDluIIiLCLmlrDluoTluIIiLCLlr5LmsrPmsZ/luIIiLCLkuIrlsbHluIIiLCLmnZHlsbHluIIiLCLplbfkupXluIIiLCLlpKnnq6XluIIiLCLmnbHmoLnluIIiLCLlsL7oirHmsqLluIIiLCLljZfpmb3luIIiLCLmnbHmnZHlsbHpg6EiLCLopb/mnZHlsbHpg6EiLCLljJfmnZHlsbHpg6EiLCLmnIDkuIrpg6EiLCLmnbHnva7os5zpg6EiLCLopb/nva7os5zpg6EiLCLmnbHnlLDlt53pg6EiLCLpo73mtbfpg6EiXV0sWyIwNyIsIuemj+WztuecjCIsIuODleOCr+OCt+ODnuOCseODsyIsImZ1a3VzaGltYSIsWyLnpo/ls7bluIIiLCLkvJrmtKXoi6Xmnb7luIIiLCLpg6HlsbHluIIiLCLjgYTjgo/jgY3luIIiLCLnmb3msrPluIIiLCLpoIjos4Dlt53luIIiLCLllpzlpJrmlrnluIIiLCLnm7jppqzluIIiLCLkuozmnKzmnb7luIIiLCLnlLDmnZHluIIiLCLljZfnm7jppqzluIIiLCLkvIrpgZTluIIiLCLmnKzlrq7luIIiLCLkvIrpgZTpg6EiLCLlronpgZTpg6EiLCLlsqnngKzpg6EiLCLljZfkvJrmtKXpg6EiLCLogLbpurvpg6EiLCLmsrPmsrzpg6EiLCLlpKfmsrzpg6EiLCLopb/nmb3msrPpg6EiLCLmnbHnmb3lt53pg6EiLCLnn7Plt53pg6EiLCLnlLDmnZHpg6EiLCLlj4zokYnpg6EiLCLnm7jppqzpg6EiXV0sWyIwOCIsIuiMqOWfjuecjCIsIuOCpOODkOODqeOCreOCseODsyIsImliYXJha2kiLFsi5rC05oi45biCIiwi5pel56uL5biCIiwi5Zyf5rWm5biCIiwi5Y+k5rKz5biCIiwi55+z5bKh5biCIiwi57WQ5Z+O5biCIiwi6b6N44Kx5bSO5biCIiwi5LiL5aa75biCIiwi5bi457eP5biCIiwi5bi46Zm45aSq55Sw5biCIiwi6auY6JCp5biCIiwi5YyX6Iyo5Z+O5biCIiwi56yg6ZaT5biCIiwi5Y+W5omL5biCIiwi54mb5LmF5biCIiwi44Gk44GP44Gw5biCIiwi44Gy44Gf44Gh44Gq44GL5biCIiwi6bm/5baL5biCIiwi5r2u5p2l5biCIiwi5a6I6LC35biCIiwi5bi46Zm45aSn5a6u5biCIiwi6YKj54+C5biCIiwi562R6KW/5biCIiwi5Z2C5p2x5biCIiwi56iy5pW35biCIiwi44GL44GZ44G/44GM44GG44KJ5biCIiwi5qGc5bed5biCIiwi56We5qCW5biCIiwi6KGM5pa55biCIiwi6Ym+55Sw5biCIiwi44Gk44GP44Gw44G/44KJ44GE5biCIiwi5bCP576O546J5biCIiwi6Iyo5Z+O55S6Iiwi5aSn5rSX55S6Iiwi5Z+O6YeM55S6Iiwi5p2x5rW35p2RIiwi5aSn5a2Q55S6Iiwi576O5rWm5p2RIiwi6Zi/6KaL55S6Iiwi5rKz5YaF55S6Iiwi5YWr5Y2D5Luj55S6Iiwi5LqU6Zye55S6Iiwi5aKD55S6Iiwi5Yip5qC555S6Il1dLFsiMDkiLCLmoIPmnKjnnIwiLCLjg4jjg4Hjgq7jgrHjg7MiLCJ0b2NoaWdpIixbIuWuh+mDveWuruW4giIsIui2s+WIqeW4giIsIuagg+acqOW4giIsIuS9kOmHjuW4giIsIum5v+ayvOW4giIsIuaXpeWFieW4giIsIuWwj+WxseW4giIsIuecn+WyoeW4giIsIuWkp+eUsOWOn+W4giIsIuefouadv+W4giIsIumCo+mgiOWhqeWOn+W4giIsIuOBleOBj+OCieW4giIsIumCo+mgiOeDj+WxseW4giIsIuS4i+mHjuW4giIsIuays+WGhemDoSIsIuiKs+izgOmDoSIsIuS4i+mDveizgOmDoSIsIuWhqeiwt+mDoSIsIumCo+mgiOmDoSJdXSxbIjEwIiwi576k6aas55yMIiwi44Kw44Oz44Oe44Kx44OzIiwiZ3VubWEiLFsi5YmN5qmL5biCIiwi6auY5bSO5biCIiwi5qGQ55Sf5biCIiwi5LyK5Yui5bSO5biCIiwi5aSq55Sw5biCIiwi5rK855Sw5biCIiwi6aSo5p6X5biCIiwi5riL5bed5biCIiwi6Jek5bKh5biCIiwi5a+M5bKh5biCIiwi5a6J5Lit5biCIiwi44G/44Gp44KK5biCIiwi5YyX576k6aas6YOhIiwi5aSa6YeO6YOhIiwi55SY5qW96YOhIiwi5ZC+5aa76YOhIiwi5Yip5qC56YOhIiwi5L2Q5rOi6YOhIiwi6YKR5qW96YOhIl1dLFsiMTEiLCLln7znjonnnIwiLCLjgrXjgqTjgr/jg57jgrHjg7MiLCJzYWl0YW1hIixbIuOBleOBhOOBn+OBvuW4guilv+WMuiIsIuOBleOBhOOBn+OBvuW4guWMl+WMuiIsIuOBleOBhOOBn+OBvuW4guWkp+WuruWMuiIsIuOBleOBhOOBn+OBvuW4guimi+ayvOWMuiIsIuOBleOBhOOBn+OBvuW4guS4reWkruWMuiIsIuOBleOBhOOBn+OBvuW4guahnOWMuiIsIuOBleOBhOOBn+OBvuW4gua1puWSjOWMuiIsIuOBleOBhOOBn+OBvuW4guWNl+WMuiIsIuOBleOBhOOBn+OBvuW4gue3keWMuiIsIuOBleOBhOOBn+OBvuW4guWyqeanu+WMuiIsIuW3nei2iuW4giIsIueGiuiwt+W4giIsIuW3neWPo+W4giIsIuihjOeUsOW4giIsIuenqeeItuW4giIsIuaJgOayouW4giIsIumjr+iDveW4giIsIuWKoOmgiOW4giIsIuacrOW6hOW4giIsIuadseadvuWxseW4giIsIuaYpeaXpemDqOW4giIsIueLreWxseW4giIsIue+veeUn+W4giIsIum0u+W3o+W4giIsIua3seiwt+W4giIsIuS4iuWwvuW4giIsIuiNieWKoOW4giIsIui2iuiwt+W4giIsIuiVqOW4giIsIuaIuOeUsOW4giIsIuWFpemWk+W4giIsIuacnemcnuW4giIsIuW/l+acqOW4giIsIuWSjOWFieW4giIsIuaWsOW6p+W4giIsIuahtuW3neW4giIsIuS5heWWnOW4giIsIuWMl+acrOW4giIsIuWFq+a9ruW4giIsIuWvjOWjq+imi+W4giIsIuS4iemDt+W4giIsIuiTrueUsOW4giIsIuWdguaIuOW4giIsIuW5uOaJi+W4giIsIum2tOODtuWztuW4giIsIuaXpemrmOW4giIsIuWQieW3neW4giIsIuOBteOBmOOBv+mHjuW4giIsIueZveWyoeW4giIsIuWMl+i2s+eri+mDoSIsIuWFpemWk+mDoSIsIuavlOS8gemDoSIsIuenqeeItumDoSIsIuWFkOeOiemDoSIsIuWkp+mHjOmDoSIsIuWNl+WfvOeOiemDoSIsIuWMl+iRm+mjvumDoSJdXSxbIjEyIiwi5Y2D6JGJ55yMIiwi44OB44OQ44Kx44OzIiwiY2hpYmEiLFsi5Y2D6JGJ5biC5Lit5aSu5Yy6Iiwi5Y2D6JGJ5biC6Iqx6KaL5bed5Yy6Iiwi5Y2D6JGJ5biC56iy5q+b5Yy6Iiwi5Y2D6JGJ5biC6Iul6JGJ5Yy6Iiwi5Y2D6JGJ5biC57eR5Yy6Iiwi5Y2D6JGJ5biC576O5rWc5Yy6Iiwi6Yqa5a2Q5biCIiwi5biC5bed5biCIiwi6Ii55qmL5biCIiwi6aSo5bGx5biCIiwi5pyo5pu05rSl5biCIiwi5p2+5oi45biCIiwi6YeO55Sw5biCIiwi6IyC5Y6f5biCIiwi5oiQ55Sw5biCIiwi5L2Q5YCJ5biCIiwi5p2x6YeR5biCIiwi5pet5biCIiwi57+S5b+X6YeO5biCIiwi5p+P5biCIiwi5Yud5rWm5biCIiwi5biC5Y6f5biCIiwi5rWB5bGx5biCIiwi5YWr5Y2D5Luj5biCIiwi5oiR5a2r5a2Q5biCIiwi6bSo5bed5biCIiwi6Y6M44Kx6LC35biCIiwi5ZCb5rSl5biCIiwi5a+M5rSl5biCIiwi5rWm5a6J5biCIiwi5Zub6KGX6YGT5biCIiwi6KKW44Kx5rWm5biCIiwi5YWr6KGX5biCIiwi5Y2w6KW/5biCIiwi55m95LqV5biCIiwi5a+M6YeM5biCIiwi5Y2X5oi/57eP5biCIiwi5Yyd55Gz5biCIiwi6aaZ5Y+W5biCIiwi5bGx5q2m5biCIiwi44GE44GZ44G/5biCIiwi5aSn57ay55m96YeM5biCIiwi5Y2w5peb6YOhIiwi6aaZ5Y+W6YOhIiwi5bGx5q2m6YOhIiwi6ZW355Sf6YOhIiwi5aS36ZqF6YOhIiwi5aS36ZqF6YOhIiwi5a6J5oi/6YOhIl1dLFsiMTMiLCLmnbHkuqzpg70iLCLjg4jjgqbjgq3jg6fjgqbjg4giLCJ0b2t5byIsWyLljYPku6PnlLDljLoiLCLkuK3lpK7ljLoiLCLmuK/ljLoiLCLmlrDlrr/ljLoiLCLmlofkuqzljLoiLCLlj7DmnbHljLoiLCLloqjnlLDljLoiLCLmsZ/mnbHljLoiLCLlk4Hlt53ljLoiLCLnm67pu5LljLoiLCLlpKfnlLDljLoiLCLkuJbnlLDosLfljLoiLCLmuIvosLfljLoiLCLkuK3ph47ljLoiLCLmnYnkuKbljLoiLCLosYrls7bljLoiLCLljJfljLoiLCLojZLlt53ljLoiLCLmnb/mqYvljLoiLCLnt7TppqzljLoiLCLotrPnq4vljLoiLCLokZvpo77ljLoiLCLmsZ/miLjlt53ljLoiLCLlhavnjovlrZDluIIiLCLnq4vlt53luIIiLCLmrabolLXph47luIIiLCLkuInpt7nluIIiLCLpnZLmooXluIIiLCLlupzkuK3luIIiLCLmmK3ls7bluIIiLCLoqr/luIPluIIiLCLnlLrnlLDluIIiLCLlsI/ph5HkupXluIIiLCLlsI/lubPluIIiLCLml6Xph47luIIiLCLmnbHmnZHlsbHluIIiLCLlm73liIblr7rluIIiLCLlm73nq4vluIIiLCLnpo/nlJ/luIIiLCLni5vmsZ/luIIiLCLmnbHlpKflkozluIIiLCLmuIXngKzluIIiLCLmnbHkuYXnlZnnsbPluIIiLCLmrabolLXmnZHlsbHluIIiLCLlpJrmkanluIIiLCLnqLLln47luIIiLCLnvr3mnZHluIIiLCLjgYLjgY3jgovph47luIIiLCLopb/mnbHkuqzluIIiLCLopb/lpJrmkanpg6EiLCLlpKfls7bnlLoiLCLmlrDls7bmnZEiLCLkuInlroXls7YiLCLlhavkuIjls7YiLCLlsI/nrKDljp/mnZEiXV0sWyIxNCIsIuelnuWliOW3neecjCIsIuOCq+ODiuOCrOODr+OCseODsyIsImthbmFnYXdhIixbIuaoqua1nOW4gum2tOimi+WMuiIsIuaoqua1nOW4guelnuWliOW3neWMuiIsIuaoqua1nOW4guilv+WMuiIsIuaoqua1nOW4guS4reWMuiIsIuaoqua1nOW4guWNl+WMuiIsIuaoqua1nOW4guS/neWcn+OCseiwt+WMuiIsIuaoqua1nOW4guejr+WtkOWMuiIsIuaoqua1nOW4gumHkeayouWMuiIsIuaoqua1nOW4gua4r+WMl+WMuiIsIuaoqua1nOW4guaIuOWhmuWMuiIsIuaoqua1nOW4gua4r+WNl+WMuiIsIuaoqua1nOW4guaXreWMuiIsIuaoqua1nOW4gue3keWMuiIsIuaoqua1nOW4gueArOiwt+WMuiIsIuaoqua1nOW4guaghOWMuiIsIuaoqua1nOW4guazieWMuiIsIuaoqua1nOW4gumdkuiRieWMuiIsIuaoqua1nOW4gumDveetkeWMuiIsIuW3neW0juW4guW3neW0juWMuiIsIuW3neW0juW4guW5uOWMuiIsIuW3neW0juW4guS4reWOn+WMuiIsIuW3neW0juW4gumrmOa0peWMuiIsIuW3neW0juW4guWkmuaRqeWMuiIsIuW3neW0juW4guWuruWJjeWMuiIsIuW3neW0juW4gum6u+eUn+WMuiIsIuebuOaooeWOn+W4gue3keWMuiIsIuebuOaooeWOn+W4guS4reWkruWMuiIsIuebuOaooeWOn+W4guWNl+WMuiIsIuaoqumgiOizgOW4giIsIuW5s+WhmuW4giIsIumOjOWAieW4giIsIuiXpOayouW4giIsIuWwj+eUsOWOn+W4giIsIuiMheODtuW0juW4giIsIumAl+WtkOW4giIsIuS4iea1puW4giIsIuenpumHjuW4giIsIuWOmuacqOW4giIsIuWkp+WSjOW4giIsIuS8iuWLouWOn+W4giIsIua1t+iAgeWQjeW4giIsIuW6p+mWk+W4giIsIuWNl+i2s+afhOW4giIsIue2vueArOW4giIsIuS4iea1pumDoSIsIumrmOW6p+mDoSIsIuS4remDoSIsIui2s+afhOS4iumDoSIsIui2s+afhOS4i+mDoSIsIuaEm+eUsumDoSJdXSxbIjE1Iiwi5paw5r2f55yMIiwi44OL44Kk44Ks44K/44Kx44OzIiwibmlpZ2F0YSIsWyLmlrDmvZ/luILljJfljLoiLCLmlrDmvZ/luILmnbHljLoiLCLmlrDmvZ/luILkuK3lpK7ljLoiLCLmlrDmvZ/luILmsZ/ljZfljLoiLCLmlrDmvZ/luILnp4vokYnljLoiLCLmlrDmvZ/luILljZfljLoiLCLmlrDmvZ/luILopb/ljLoiLCLmlrDmvZ/luILopb/okrLljLoiLCLplbflsqHluIIiLCLkuInmnaHluIIiLCLmn4/ltI7luIIiLCLmlrDnmbrnlLDluIIiLCLlsI/ljYPosLfluIIiLCLliqDojILluIIiLCLljYHml6XnlLrluIIiLCLopovpmYTluIIiLCLmnZHkuIrluIIiLCLnh5XluIIiLCLns7jprZrlt53luIIiLCLlppnpq5jluIIiLCLkupTms4nluIIiLCLkuIrotorluIIiLCLpmL/os4Dph47luIIiLCLkvZDmuKHluIIiLCLprZrmsrzluIIiLCLljZfprZrmsrzluIIiLCLog47lhoXluIIiLCLljJfokrLljp/pg6EiLCLopb/okrLljp/pg6EiLCLljZfokrLljp/pg6EiLCLmnbHokrLljp/pg6EiLCLkuInls7bpg6EiLCLljZfprZrmsrzpg6EiLCLkuK3prZrmsrzpg6EiLCLliIjnvr3pg6EiLCLlsqnoiLnpg6EiXV0sWyIxNiIsIuWvjOWxseecjCIsIuODiOODpOODnuOCseODsyIsInRveWFtYSIsWyLlr4zlsbHluIIiLCLpq5jlsqHluIIiLCLprZrmtKXluIIiLCLmsLfopovluIIiLCLmu5Hlt53luIIiLCLpu5Lpg6jluIIiLCLnoLrms6LluIIiLCLlsI/nn6Lpg6jluIIiLCLljZfnoLrluIIiLCLlsITmsLTluIIiLCLkuK3mlrDlt53pg6EiLCLkuIvmlrDlt53pg6EiXV0sWyIxNyIsIuefs+W3neecjCIsIuOCpOOCt+OCq+ODr+OCseODsyIsImlzaGlrYXdhIixbIumHkeayouW4giIsIuS4g+WwvuW4giIsIuWwj+advuW4giIsIui8quWztuW4giIsIuePoOa0suW4giIsIuWKoOizgOW4giIsIue+veWSi+W4giIsIuOBi+OBu+OBj+W4giIsIueZveWxseW4giIsIuiDvee+juW4giIsIumHjuOAheW4guW4giIsIuiDvee+jumDoSIsIuays+WMl+mDoSIsIue+veWSi+mDoSIsIum5v+WztumDoSIsIumzs+ePoOmDoSJdXSxbIjE4Iiwi56aP5LqV55yMIiwi44OV44Kv44Kk44Kx44OzIiwiZnVrdWkiLFsi56aP5LqV5biCIiwi5pWm6LOA5biCIiwi5bCP5rWc5biCIiwi5aSn6YeO5biCIiwi5Yud5bGx5biCIiwi6a+W5rGf5biCIiwi44GC44KP44KJ5biCIiwi6LaK5YmN5biCIiwi5Z2C5LqV5biCIiwi5ZCJ55Sw6YOhIiwi5LuK56uL6YOhIiwi5Y2X5p2h6YOhIiwi5Li555Sf6YOhIiwi5LiJ5pa56YOhIiwi5aSn6aOv6YOhIiwi5LiJ5pa55LiK5Lit6YOhIl1dLFsiMTkiLCLlsbHmoqjnnIwiLCLjg6Tjg57jg4rjgrfjgrHjg7MiLCJ5YW1hbmFzaGkiLFsi55Sy5bqc5biCIiwi5a+M5aOr5ZCJ55Sw5biCIiwi6YO955WZ5biCIiwi5bGx5qKo5biCIiwi5aSn5pyI5biCIiwi6Z+u5bSO5biCIiwi5Y2X44Ki44Or44OX44K55biCIiwi5YyX5p2c5biCIiwi55Sy5paQ5biCIiwi56yb5ZC55biCIiwi5LiK6YeO5Y6f5biCIiwi55Sy5bee5biCIiwi5Lit5aSu5biCIiwi6KW/5YWr5Luj6YOhIiwi5Y2X5beo5pGp6YOhIiwi5Lit5beo5pGp6YOhIiwi5Y2X6YO955WZ6YOhIiwi5YyX6YO955WZ6YOhIl1dLFsiMjAiLCLplbfph47nnIwiLCLjg4rjgqzjg47jgrHjg7MiLCJuYWdhbm8iLFsi6ZW36YeO5biCIiwi5p2+5pys5biCIiwi5LiK55Sw5biCIiwi5bKh6LC35biCIiwi6aOv55Sw5biCIiwi6KuP6Kiq5biCIiwi6aCI5Z2C5biCIiwi5bCP6Ku45biCIiwi5LyK6YKj5biCIiwi6aeS44O25qC55biCIiwi5Lit6YeO5biCIiwi5aSn55S65biCIiwi6aOv5bGx5biCIiwi6IyF6YeO5biCIiwi5aGp5bC75biCIiwi5L2Q5LmF5biCIiwi5Y2D5puy5biCIiwi5p2x5b6h5biCIiwi5a6J5puH6YeO5biCIiwi5Y2X5L2Q5LmF6YOhIiwi5YyX5L2Q5LmF6YOhIiwi5bCP55yM6YOhIiwi6KuP6Kiq6YOhIiwi5LiK5LyK6YKj6YOhIiwi5LiL5LyK6YKj6YOhIiwi5pyo5pu96YOhIiwi5p2x562R5pGp6YOhIiwi5YyX5a6J5puH6YOhIiwi5Z+056eR6YOhIiwi5LiK6auY5LqV6YOhIiwi5LiL6auY5LqV6YOhIiwi5LiK5rC05YaF6YOhIiwi5LiL5rC05YaF6YOhIl1dLFsiMjEiLCLlspDpmJznnIwiLCLjgq7jg5XjgrHjg7MiLCJnaWZ1IixbIuWykOmYnOW4giIsIuWkp+Weo+W4giIsIumrmOWxseW4giIsIuWkmuayu+imi+W4giIsIumWouW4giIsIuS4rea0peW3neW4giIsIue+jua/g+W4giIsIueRnua1quW4giIsIue+veWztuW4giIsIuaBtemCo+W4giIsIue+jua/g+WKoOiMguW4giIsIuWcn+WykOW4giIsIuWQhOWLmeWOn+W4giIsIuWPr+WFkOW4giIsIuWxseecjOW4giIsIueRnuepguW4giIsIumjm+moqOW4giIsIuacrOW3o+W4giIsIumDoeS4iuW4giIsIuS4i+WRguW4giIsIua1t+a0peW4giIsIue+veWztumDoSIsIumkiuiAgemDoSIsIuS4jeegtOmDoSIsIuWuieWFq+mDoSIsIuaPluaWkOmDoSIsIuacrOW3o+mDoSIsIuWKoOiMgumDoSIsIuWPr+WFkOmDoSIsIuWkp+mHjumDoSJdXSxbIjIyIiwi6Z2Z5bKh55yMIiwi44K344K644Kq44Kr44Kx44OzIiwic2hpenVva2EiLFsi6Z2Z5bKh5biC6JG15Yy6Iiwi6Z2Z5bKh5biC6ae/5rKz5Yy6Iiwi6Z2Z5bKh5biC5riF5rC05Yy6Iiwi5rWc5p2+5biC5Lit5Yy6Iiwi5rWc5p2+5biC5p2x5Yy6Iiwi5rWc5p2+5biC6KW/5Yy6Iiwi5rWc5p2+5biC5Y2X5Yy6Iiwi5rWc5p2+5biC5YyX5Yy6Iiwi5rWc5p2+5biC5rWc5YyX5Yy6Iiwi5rWc5p2+5biC5aSp56uc5Yy6Iiwi5rK85rSl5biCIiwi54ax5rW35biCIiwi5LiJ5bO25biCIiwi5a+M5aOr5a6u5biCIiwi5LyK5p2x5biCIiwi5bO255Sw5biCIiwi5a+M5aOr5biCIiwi56OQ55Sw5biCIiwi54S85rSl5biCIiwi5o6b5bed5biCIiwi6Jek5p6d5biCIiwi5b6h5q6/5aC05biCIiwi6KKL5LqV5biCIiwi5LiL55Sw5biCIiwi6KO+6YeO5biCIiwi5rmW6KW/5biCIiwi5LyK6LGG5biCIiwi5b6h5YmN5bSO5biCIiwi6I+K5bed5biCIiwi5LyK6LGG44Gu5Zu95biCIiwi54mn5LmL5Y6f5biCIiwi6LOA6IyC6YOhIiwi55Sw5pa56YOhIiwi6ae/5p2x6YOhIiwi5qab5Y6f6YOhIiwi5ZGo5pm66YOhIl1dLFsiMjMiLCLmhJvnn6XnnIwiLCLjgqLjgqTjg4HjgrHjg7MiLCJhaWNoaSIsWyLlkI3lj6TlsYvluILljYPnqK7ljLoiLCLlkI3lj6TlsYvluILmnbHljLoiLCLlkI3lj6TlsYvluILljJfljLoiLCLlkI3lj6TlsYvluILopb/ljLoiLCLlkI3lj6TlsYvluILkuK3mnZHljLoiLCLlkI3lj6TlsYvluILkuK3ljLoiLCLlkI3lj6TlsYvluILmmK3lkozljLoiLCLlkI3lj6TlsYvluILnkZ7nqYLljLoiLCLlkI3lj6TlsYvluILnhrHnlLDljLoiLCLlkI3lj6TlsYvluILkuK3lt53ljLoiLCLlkI3lj6TlsYvluILmuK/ljLoiLCLlkI3lj6TlsYvluILljZfljLoiLCLlkI3lj6TlsYvluILlrojlsbHljLoiLCLlkI3lj6TlsYvluILnt5HljLoiLCLlkI3lj6TlsYvluILlkI3mnbHljLoiLCLlkI3lj6TlsYvluILlpKnnmb3ljLoiLCLosYrmqYvluIIiLCLlsqHltI7luIIiLCLkuIDlrq7luIIiLCLngKzmiLjluIIiLCLljYrnlLDluIIiLCLmmKXml6XkupXluIIiLCLosYrlt53luIIiLCLmtKXls7bluIIiLCLnoqfljZfluIIiLCLliIjosLfluIIiLCLosYrnlLDluIIiLCLlronln47luIIiLCLopb/lsL7luIIiLCLokrLpg6HluIIiLCLniqzlsbHluIIiLCLluLjmu5HluIIiLCLmsZ/ljZfluIIiLCLlsI/niafluIIiLCLnqLLmsqLluIIiLCLmlrDln47luIIiLCLmnbHmtbfluIIiLCLlpKflupzluIIiLCLnn6XlpJrluIIiLCLnn6Xnq4vluIIiLCLlsL7lvLXml63luIIiLCLpq5jmtZzluIIiLCLlsqnlgInluIIiLCLosYrmmI7luIIiLCLml6XpgLLluIIiLCLnlLDljp/luIIiLCLmhJvopb/luIIiLCLmuIXpoIjluIIiLCLljJflkI3lj6TlsYvluIIiLCLlvKXlr4zluIIiLCLjgb/jgojjgZfluIIiLCLjgYLjgb7luIIiLCLplbfkuYXmiYvluIIiLCLmhJvnn6Xpg6EiLCLopb/mmKXml6XkupXpg6EiLCLkuLnnvr3pg6EiLCLmtbfpg6jpg6EiLCLnn6XlpJrpg6EiLCLpoY3nlLDpg6EiLCLljJfoqK3mpb3pg6EiXV0sWyIyNCIsIuS4iemHjeecjCIsIuODn+OCqOOCseODsyIsIm1pZSIsWyLmtKXluIIiLCLlm5vml6XluILluIIiLCLkvIrli6LluIIiLCLmnb7pmKrluIIiLCLmoZHlkI3luIIiLCLpiLTpub/luIIiLCLlkI3lvLXluIIiLCLlsL7pt7LluIIiLCLkuoDlsbHluIIiLCLps6Xnvr3luIIiLCLnhorph47luIIiLCLjgYTjgarjgbnluIIiLCLlv5fmkanluIIiLCLkvIros4DluIIiLCLmoZHlkI3pg6EiLCLlk6HlvIHpg6EiLCLkuInph43pg6EiLCLlpJrmsJfpg6EiLCLluqbkvJrpg6EiLCLljJfniZ/lqYHpg6EiLCLljZfniZ/lqYHpg6EiXV0sWyIyNSIsIua7i+izgOecjCIsIuOCt+OCrOOCseODsyIsInNoaWdhIixbIuWkp+a0peW4giIsIuW9puagueW4giIsIumVt+a1nOW4giIsIui/keaxn+WFq+W5oeW4giIsIuiNiea0peW4giIsIuWuiOWxseW4giIsIuagl+adseW4giIsIueUsuizgOW4giIsIumHjua0suW4giIsIua5luWNl+W4giIsIumrmOWztuW4giIsIuadsei/keaxn+W4giIsIuexs+WOn+W4giIsIuiSsueUn+mDoSIsIuaEm+efpemDoSIsIueKrOS4iumDoSJdXSxbIjI2Iiwi5Lqs6YO95bqcIiwi44Kt44On44Km44OI44OVIiwia3lvdG8iLFsi5Lqs6YO95biC5YyX5Yy6Iiwi5Lqs6YO95biC5LiK5Lqs5Yy6Iiwi5Lqs6YO95biC5bem5Lqs5Yy6Iiwi5Lqs6YO95biC5Lit5Lqs5Yy6Iiwi5Lqs6YO95biC5p2x5bGx5Yy6Iiwi5Lqs6YO95biC5LiL5Lqs5Yy6Iiwi5Lqs6YO95biC5Y2X5Yy6Iiwi5Lqs6YO95biC5Y+z5Lqs5Yy6Iiwi5Lqs6YO95biC5LyP6KaL5Yy6Iiwi5Lqs6YO95biC5bGx56eR5Yy6Iiwi5Lqs6YO95biC6KW/5Lqs5Yy6Iiwi56aP55+l5bGx5biCIiwi6Iie6ba05biCIiwi57a+6YOo5biCIiwi5a6H5rK75biCIiwi5a6u5rSl5biCIiwi5LqA5bKh5biCIiwi5Z+O6Zm95biCIiwi5ZCR5pel5biCIiwi6ZW35bKh5Lqs5biCIiwi5YWr5bmh5biCIiwi5Lqs55Sw6L665biCIiwi5Lqs5Li55b6M5biCIiwi5Y2X5Li55biCIiwi5pyo5rSl5bed5biCIiwi5LmZ6KiT6YOhIiwi5LmF5LiW6YOhIiwi57a05Zac6YOhIiwi55u45qW96YOhIiwi6Ii55LqV6YOhIiwi5LiO6Kyd6YOhIl1dLFsiMjciLCLlpKfpmKrlupwiLCLjgqrjgqrjgrXjgqvjg5UiLCJvc2FrYSIsWyLlpKfpmKrluILpg73ls7bljLoiLCLlpKfpmKrluILnpo/ls7bljLoiLCLlpKfpmKrluILmraToirHljLoiLCLlpKfpmKrluILopb/ljLoiLCLlpKfpmKrluILmuK/ljLoiLCLlpKfpmKrluILlpKfmraPljLoiLCLlpKfpmKrluILlpKnnjovlr7rljLoiLCLlpKfpmKrluILmtarpgJ/ljLoiLCLlpKfpmKrluILopb/mt4Dlt53ljLoiLCLlpKfpmKrluILmnbHmt4Dlt53ljLoiLCLlpKfpmKrluILmnbHmiJDljLoiLCLlpKfpmKrluILnlJ/ph47ljLoiLCLlpKfpmKrluILml63ljLoiLCLlpKfpmKrluILln47mnbHljLoiLCLlpKfpmKrluILpmL/lgI3ph47ljLoiLCLlpKfpmKrluILkvY/lkInljLoiLCLlpKfpmKrluILmnbHkvY/lkInljLoiLCLlpKfpmKrluILopb/miJDljLoiLCLlpKfpmKrluILmt4Dlt53ljLoiLCLlpKfpmKrluILptrTopovljLoiLCLlpKfpmKrluILkvY/kuYvmsZ/ljLoiLCLlpKfpmKrluILlubPph47ljLoiLCLlpKfpmKrluILljJfljLoiLCLlpKfpmKrluILkuK3lpK7ljLoiLCLloLrluILloLrljLoiLCLloLrluILkuK3ljLoiLCLloLrluILmnbHljLoiLCLloLrluILopb/ljLoiLCLloLrluILljZfljLoiLCLloLrluILljJfljLoiLCLloLrluILnvo7ljp/ljLoiLCLlsrjlkoznlLDluIIiLCLosYrkuK3luIIiLCLmsaDnlLDluIIiLCLlkLnnlLDluIIiLCLms4nlpKfmtKXluIIiLCLpq5jmp7vluIIiLCLosp3loZrluIIiLCLlrojlj6PluIIiLCLmnprmlrnluIIiLCLojKjmnKjluIIiLCLlhavlsL7luIIiLCLms4nkvZDph47luIIiLCLlr4znlLDmnpfluIIiLCLlr53lsYvlt53luIIiLCLmsrPlhoXplbfph47luIIiLCLmnb7ljp/luIIiLCLlpKfmnbHluIIiLCLlkozms4nluIIiLCLnrpXpnaLluIIiLCLmn4/ljp/luIIiLCLnvr3mm7Pph47luIIiLCLploDnnJ/luIIiLCLmkYLmtKXluIIiLCLpq5jnn7PluIIiLCLol6TkupXlr7rluIIiLCLmnbHlpKfpmKrluIIiLCLms4nljZfluIIiLCLlm5vmop3nlbfluIIiLCLkuqTph47luIIiLCLlpKfpmKrni63lsbHluIIiLCLpmKrljZfluIIiLCLkuInls7bpg6EiLCLosYrog73pg6EiLCLms4nljJfpg6EiLCLms4nljZfpg6EiLCLljZfmsrPlhoXpg6EiXV0sWyIyOCIsIuWFteW6q+ecjCIsIuODkuODp+OCpuOCtOOCseODsyIsImh5b2dvIixbIuelnuaIuOW4guadseeBmOWMuiIsIuelnuaIuOW4gueBmOWMuiIsIuelnuaIuOW4guWFteW6q+WMuiIsIuelnuaIuOW4gumVt+eUsOWMuiIsIuelnuaIuOW4gumgiOejqOWMuiIsIuelnuaIuOW4guWeguawtOWMuiIsIuelnuaIuOW4guWMl+WMuiIsIuelnuaIuOW4guS4reWkruWMuiIsIuelnuaIuOW4guilv+WMuiIsIuWnq+i3r+W4giIsIuWwvOW0juW4giIsIuaYjuefs+W4giIsIuilv+WuruW4giIsIua0suacrOW4giIsIuiKpuWxi+W4giIsIuS8iuS4ueW4giIsIuebuOeUn+W4giIsIuixiuWyoeW4giIsIuWKoOWPpOW3neW4giIsIui1pOepguW4giIsIuilv+iEh+W4giIsIuWuneWhmuW4giIsIuS4ieacqOW4giIsIumrmOegguW4giIsIuW3neilv+W4giIsIuWwj+mHjuW4giIsIuS4ieeUsOW4giIsIuWKoOilv+W4giIsIuevoOWxseW4giIsIumkiueItuW4giIsIuS4ueazouW4giIsIuWNl+OBguOCj+OBmOW4giIsIuacneadpeW4giIsIua3oei3r+W4giIsIuWujeeyn+W4giIsIuWKoOadseW4giIsIuOBn+OBpOOBruW4giIsIuW3nei+uumDoSIsIuWkmuWPr+mDoSIsIuWKoOWPpOmDoSIsIuelnuW0jumDoSIsIuaPluS/nemDoSIsIui1pOepgumDoSIsIuS9kOeUqOmDoSIsIue+juaWuemDoSJdXSxbIjI5Iiwi5aWI6Imv55yMIiwi44OK44Op44Kx44OzIiwibmFyYSIsWyLlpYjoia/luIIiLCLlpKflkozpq5jnlLDluIIiLCLlpKflkozpg6HlsbHluIIiLCLlpKnnkIbluIIiLCLmqb/ljp/luIIiLCLmoZzkupXluIIiLCLkupTmop3luIIiLCLlvqHmiYDluIIiLCLnlJ/pp5LluIIiLCLpppnoip3luIIiLCLokZvln47luIIiLCLlrofpmYDluIIiLCLlsbHovrrpg6EiLCLnlJ/pp5Lpg6EiLCLno6/ln47pg6EiLCLlrofpmYDpg6EiLCLpq5jluILpg6EiLCLljJfokZvln47pg6EiLCLlkInph47pg6EiXV0sWyIzMCIsIuWSjOatjOWxseecjCIsIuODr+OCq+ODpOODnuOCseODsyIsIndha2F5YW1hIixbIuWSjOatjOWxseW4giIsIua1t+WNl+W4giIsIuapi+acrOW4giIsIuacieeUsOW4giIsIuW+oeWdiuW4giIsIueUsOi+uuW4giIsIuaWsOWuruW4giIsIue0gOOBruW3neW4giIsIuWyqeWHuuW4giIsIua1t+iNiemDoSIsIuS8iumDvemDoSIsIuacieeUsOmDoSIsIuaXpemrmOmDoSIsIuilv+eJn+WpgemDoSIsIuadseeJn+WpgemDoSJdXSxbIjMxIiwi6bOl5Y+W55yMIiwi44OI44OD44OI44Oq44Kx44OzIiwidG90dG9yaSIsWyLps6Xlj5bluIIiLCLnsbPlrZDluIIiLCLlgInlkInluIIiLCLlooPmuK/luIIiLCLlsqnnvo7pg6EiLCLlhavpoK3pg6EiLCLmnbHkvK/pg6EiLCLopb/kvK/pg6EiLCLml6Xph47pg6EiXV0sWyIzMiIsIuWztuagueecjCIsIuOCt+ODnuODjeOCseODsyIsInNoaW1hbmUiLFsi5p2+5rGf5biCIiwi5rWc55Sw5biCIiwi5Ye66Zuy5biCIiwi55uK55Sw5biCIiwi5aSn55Sw5biCIiwi5a6J5p2l5biCIiwi5rGf5rSl5biCIiwi6Zuy5Y2X5biCIiwi5LuB5aSa6YOhIiwi6aOv55+z6YOhIiwi6YKR5pm66YOhIiwi6bm/6Laz6YOhIiwi6Zqg5bKQ6YOhIl1dLFsiMzMiLCLlsqHlsbHnnIwiLCLjgqrjgqvjg6Tjg57jgrHjg7MiLCJva2F5YW1hIixbIuWyoeWxseW4guWMl+WMuiIsIuWyoeWxseW4guS4reWMuiIsIuWyoeWxseW4guadseWMuiIsIuWyoeWxseW4guWNl+WMuiIsIuWAieaVt+W4giIsIua0peWxseW4giIsIueOiemHjuW4giIsIuesoOWyoeW4giIsIuS6leWOn+W4giIsIue3j+ekvuW4giIsIumrmOaigeW4giIsIuaWsOimi+W4giIsIuWCmeWJjeW4giIsIueArOaIuOWGheW4giIsIui1pOejkOW4giIsIuecn+W6reW4giIsIue+juS9nOW4giIsIua1heWPo+W4giIsIuWSjOawl+mDoSIsIumDveeqqumDoSIsIua1heWPo+mDoSIsIuWwj+eUsOmDoSIsIuiLq+eUsOmDoSIsIuWLneeUsOmDoSIsIuiLseeUsOmDoSIsIuS5heexs+mDoSIsIuWKoOizgOmDoSJdXSxbIjM0Iiwi5bqD5bO255yMIiwi44OS44Ot44K344Oe44Kx44OzIiwiaGlyb3NoaW1hIixbIuW6g+WztuW4guS4reWMuiIsIuW6g+WztuW4guadseWMuiIsIuW6g+WztuW4guWNl+WMuiIsIuW6g+WztuW4guilv+WMuiIsIuW6g+WztuW4guWuieS9kOWNl+WMuiIsIuW6g+WztuW4guWuieS9kOWMl+WMuiIsIuW6g+WztuW4guWuieiKuOWMuiIsIuW6g+WztuW4guS9kOS8r+WMuiIsIuWRieW4giIsIuerueWOn+W4giIsIuS4ieWOn+W4giIsIuWwvumBk+W4giIsIuemj+WxseW4giIsIuW6nOS4reW4giIsIuS4ieasoeW4giIsIuW6hOWOn+W4giIsIuWkp+erueW4giIsIuadseW6g+WztuW4giIsIuW7v+aXpeW4guW4giIsIuWuieiKuOmrmOeUsOW4giIsIuaxn+eUsOWztuW4giIsIuWuieiKuOmDoSIsIuWxseecjOmDoSIsIuixiueUsOmDoSIsIuS4lue+hemDoSIsIuelnuefs+mDoSJdXSxbIjM1Iiwi5bGx5Y+j55yMIiwi44Ok44Oe44Kw44OB44Kx44OzIiwieWFtYWd1Y2hpIixbIuS4i+mWouW4giIsIuWuh+mDqOW4giIsIuWxseWPo+W4giIsIuiQqeW4giIsIumYsuW6nOW4giIsIuS4i+advuW4giIsIuWyqeWbveW4giIsIuWFieW4giIsIumVt+mWgOW4giIsIuafs+S6leW4giIsIue+juelouW4giIsIuWRqOWNl+W4giIsIuWxsemZveWwj+mHjueUsOW4giIsIuWkp+WztumDoSIsIueOluePgumDoSIsIueGiuavm+mDoSIsIumYv+atpumDoSJdXSxbIjM2Iiwi5b6z5bO255yMIiwi44OI44Kv44K344Oe44Kx44OzIiwidG9rdXNoaW1hIixbIuW+s+WztuW4giIsIumztOmWgOW4giIsIuWwj+advuWztuW4giIsIumYv+WNl+W4giIsIuWQiemHjuW3neW4giIsIumYv+azouW4giIsIue+jummrOW4giIsIuS4ieWlveW4giIsIuWLnea1pumDoSIsIuWQjeadsemDoSIsIuWQjeilv+mDoSIsIumCo+izgOmDoSIsIua1t+mDqOmDoSIsIuadv+mHjumDoSIsIue+jummrOmDoSIsIuS4ieWlvemDoSJdXSxbIjM3Iiwi6aaZ5bed55yMIiwi44Kr44Ks44Ov44Kx44OzIiwia2FnYXdhIixbIumrmOadvuW4giIsIuS4uOS6gOW4giIsIuWdguWHuuW4giIsIuWWhOmAmuWvuuW4giIsIuims+mfs+WvuuW4giIsIuOBleOBrOOBjeW4giIsIuadseOBi+OBjOOCj+W4giIsIuS4ieixiuW4giIsIuWwj+ixhumDoSIsIuWwj+ixhumDoSIsIuacqOeUsOmDoSIsIue2vuatjOmDoSIsIuS7suWkmuW6piJdXSxbIjM4Iiwi5oSb5aqb55yMIiwi44Ko44OS44Oh44Kx44OzIiwiZWhpbWUiLFsi5p2+5bGx5biCIiwi5LuK5rK75biCIiwi5a6H5ZKM5bO25biCIiwi5YWr5bmh5rWc5biCIiwi5paw5bGF5rWc5biCIiwi6KW/5p2h5biCIiwi5aSn5rSy5biCIiwi5LyK5LqI5biCIiwi5Zub5Zu95Lit5aSu5biCIiwi6KW/5LqI5biCIiwi5p2x5rip5biCIiwi6LaK5pm66YOhIiwi5LiK5rWu56m06YOhIiwi5LyK5LqI6YOhIiwi5Zac5aSa6YOhIiwi6KW/5a6H5ZKM6YOhIiwi5YyX5a6H5ZKM6YOhIiwi5Y2X5a6H5ZKM6YOhIl1dLFsiMzkiLCLpq5jnn6XnnIwiLCLjgrPjgqbjg4HjgrHjg7MiLCJrb2NoaSIsWyLpq5jnn6XluIIiLCLlrqTmiLjluIIiLCLlronoirjluIIiLCLljZflm73luIIiLCLlnJ/kvZDluIIiLCLpoIjltI7luIIiLCLlrr/mr5vluIIiLCLlnJ/kvZDmuIXmsLTluIIiLCLlm5vkuIfljYHluIIiLCLpppnljZfluIIiLCLpppnnvo7luIIiLCLlronoirjpg6EiLCLplbflsqHpg6EiLCLlnJ/kvZDpg6EiLCLlkL7lt53pg6EiLCLpq5jlsqHpg6EiLCLluaHlpJrpg6EiXV0sWyI0MCIsIuemj+WyoeecjCIsIuODleOCr+OCquOCq+OCseODsyIsImZ1a3Vva2EiLFsi5YyX5Lmd5bee5biC6ZaA5Y+45Yy6Iiwi5YyX5Lmd5bee5biC6Iul5p2+5Yy6Iiwi5YyX5Lmd5bee5biC5oi455WR5Yy6Iiwi5YyX5Lmd5bee5biC5bCP5YCJ5YyX5Yy6Iiwi5YyX5Lmd5bee5biC5bCP5YCJ5Y2X5Yy6Iiwi5YyX5Lmd5bee5biC5YWr5bmh5p2x5Yy6Iiwi5YyX5Lmd5bee5biC5YWr5bmh6KW/5Yy6Iiwi56aP5bKh5biC5p2x5Yy6Iiwi56aP5bKh5biC5Y2a5aSa5Yy6Iiwi56aP5bKh5biC5Lit5aSu5Yy6Iiwi56aP5bKh5biC5Y2X5Yy6Iiwi56aP5bKh5biC6KW/5Yy6Iiwi56aP5bKh5biC5Z+O5Y2X5Yy6Iiwi56aP5bKh5biC5pep6Imv5Yy6Iiwi5aSn54mf55Sw5biCIiwi5LmF55WZ57Gz5biCIiwi55u05pa55biCIiwi6aOv5aGa5biCIiwi55Sw5bed5biCIiwi5p+z5bed5biCIiwi5YWr5aWz5biCIiwi562R5b6M5biCIiwi5aSn5bed5biCIiwi6KGM5qmL5biCIiwi6LGK5YmN5biCIiwi5Lit6ZaT5biCIiwi5bCP6YOh5biCIiwi562R57Sr6YeO5biCIiwi5pil5pel5biCIiwi5aSn6YeO5Z+O5biCIiwi5a6X5YOP5biCIiwi5aSq5a6w5bqc5biCIiwi5Y+k6LOA5biCIiwi56aP5rSl5biCIiwi44GG44GN44Gv5biCIiwi5a6u6Iul5biCIiwi5ZiJ6bq75biCIiwi5pyd5YCJ5biCIiwi44G/44KE44G+5biCIiwi57O45bO25biCIiwi562R57Sr6YOhIiwi57Of5bGL6YOhIiwi6YGg6LOA6YOhIiwi6Z6N5omL6YOhIiwi5ZiJ56mC6YOhIiwi5pyd5YCJ6YOhIiwi5LiJ5LqV6YOhIiwi5LiJ5r206YOhIiwi5YWr5aWz6YOhIiwi55Sw5bed6YOhIiwi5Lqs6YO96YOhIiwi56+J5LiK6YOhIl1dLFsiNDEiLCLkvZDos4DnnIwiLCLjgrXjgqzjgrHjg7MiLCJzYWdhIixbIuS9kOizgOW4giIsIuWUkOa0peW4giIsIumzpeagluW4giIsIuWkmuS5heW4giIsIuS8iuS4h+mHjOW4giIsIuatpumbhOW4giIsIum5v+WztuW4giIsIuWwj+WfjuW4giIsIuWsiemHjuW4giIsIuelnuWfvOW4giIsIuelnuWfvOmDoSIsIuS4iemkiuWfuumDoSIsIuadseadvua1pumDoSIsIuilv+advua1pumDoSIsIuadteWztumDoSIsIuiXpOa0pemDoSJdXSxbIjQyIiwi6ZW35bSO55yMIiwi44OK44Ks44K144Kt44Kx44OzIiwibmFnYXNha2kiLFsi6ZW35bSO5biCIiwi5L2Q5LiW5L+d5biCIiwi5bO25Y6f5biCIiwi6Kur5pep5biCIiwi5aSn5p2R5biCIiwi5bmz5oi45biCIiwi5p2+5rWm5biCIiwi5a++6aas5biCIiwi5aOx5bKQ5biCIiwi5LqU5bO25biCIiwi6KW/5rW35biCIiwi6Zuy5LuZ5biCIiwi5Y2X5bO25Y6f5biCIiwi6KW/5b285p216YOhIiwi5p2x5b285p216YOhIiwi5YyX5p2+5rWm6YOhIiwi5Y2X5p2+5rWm6YOhIl1dLFsiNDMiLCLnhormnKznnIwiLCLjgq/jg57jg6Ljg4jjgrHjg7MiLCJrdW1hbW90byIsWyLnhormnKzluILkuK3lpK7ljLoiLCLnhormnKzluILmnbHljLoiLCLnhormnKzluILopb/ljLoiLCLnhormnKzluILljZfljLoiLCLnhormnKzluILljJfljLoiLCLlhavku6PluIIiLCLkurrlkInluIIiLCLojZLlsL7luIIiLCLmsLTkv6PluIIiLCLnjonlkI3luIIiLCLlsbHpub/luIIiLCLoj4rmsaDluIIiLCLlroflnJ/luIIiLCLkuIrlpKnojYnluIIiLCLlrofln47luIIiLCLpmL/omIfluIIiLCLlpKnojYnluIIiLCLlkIjlv5fluIIiLCLkuIvnm4rln47pg6EiLCLnjonlkI3pg6EiLCLoj4rmsaDpg6EiLCLpmL/omIfpg6EiLCLkuIrnm4rln47pg6EiLCLlhavku6Ppg6EiLCLokabljJfpg6EiLCLnkIPno6jpg6EiLCLlpKnojYnpg6EiXV0sWyI0NCIsIuWkp+WIhuecjCIsIuOCquOCquOCpOOCv+OCseODsyIsIm9pdGEiLFsi5aSn5YiG5biCIiwi5Yil5bqc5biCIiwi5Lit5rSl5biCIiwi5pel55Sw5biCIiwi5L2Q5Lyv5biCIiwi6Ie85p215biCIiwi5rSl5LmF6KaL5biCIiwi56u555Sw5biCIiwi6LGK5b6M6auY55Sw5biCIiwi5p2156+J5biCIiwi5a6H5L2Q5biCIiwi6LGK5b6M5aSn6YeO5biCIiwi55Sx5biD5biCIiwi5Zu95p2x5biCIiwi6YCf6KaL6YOhIiwi546W54+g6YOhIl1dLFsiNDUiLCLlrq7ltI7nnIwiLCLjg5/jg6Tjgrbjgq3jgrHjg7MiLCJtaXlhemFraSIsWyLlrq7ltI7luIIiLCLpg73ln47luIIiLCLlu7blsqHluIIiLCLml6XljZfluIIiLCLlsI/mnpfluIIiLCLml6XlkJHluIIiLCLkuLLplpPluIIiLCLopb/pg73luIIiLCLjgYjjgbPjga7luIIiLCLljJfoq7jnnIzpg6EiLCLopb/oq7jnnIzpg6EiLCLmnbHoq7jnnIzpg6EiLCLlhZDmua/pg6Hpg70iLCLmnbHoh7zmnbXpg6EiLCLopb/oh7zmnbXpg6EiXV0sWyI0NiIsIum5v+WFkOWztuecjCIsIuOCq+OCtOOCt+ODnuOCseODsyIsImthZ29zaGltYSIsWyLpub/lhZDls7bluIIiLCLpub/lsYvluIIiLCLmnpXltI7luIIiLCLpmL/kuYXmoLnluIIiLCLlh7rmsLTluIIiLCLmjIflrr/luIIiLCLopb/kuYvooajluIIiLCLlnoLmsLTluIIiLCLolqnmkanlt53lhoXluIIiLCLml6Xnva7luIIiLCLmm73mlrzluIIiLCLpnKfls7bluIIiLCLjgYTjgaHjgY3kuLLmnKjph47luIIiLCLljZfjgZXjgaTjgb7luIIiLCLlv5fluIPlv5fluIIiLCLlpYTnvo7luIIiLCLljZfkuZ3lt57luIIiLCLkvIrkvZDluIIiLCLlp7boia/luIIiLCLpub/lhZDls7bpg6EiLCLolqnmkanpg6EiLCLlh7rmsLTpg6EiLCLlp7boia/pg6EiLCLmm73mlrzpg6EiLCLogp3lsZ7pg6EiLCLnhormr5vpg6EiLCLlpKfls7bpg6EiXV0sWyI0NyIsIuaylue4hOecjCIsIuOCquOCreODiuODr+OCseODsyIsIm9raW5hd2EiLFsi6YKj6KaH5biCIiwi5a6c6YeO5rm+5biCIiwi55+z5Z6j5biCIiwi5rWm5re75biCIiwi5ZCN6K235biCIiwi57O45rqA5biCIiwi5rKW57iE5biCIiwi6LGK6KaL5Z+O5biCIiwi44GG44KL44G+5biCIiwi5a6u5Y+k5bO25biCIiwi5Y2X5Z+O5biCIiwi5Zu96aCt6YOhIiwi5Lit6aCt6YOhIiwi5bO25bC76YOhIiwi5a6u5Y+k6YOhIiwi5YWr6YeN5bGx6YOhIl1dXTsK"></script>
+<script>
+/* ================= DATA ================= */
+/* 全国市町村データ：assets/japan-data.js（提供された Nihon.json 由来・47都道府県／全1,347市町村） */
+const JP=(window.JAPAN_DATA||[]).map(p=>({id:p[0],name:p[1],kana:p[2],en:p[3],cities:p[4]}));
+const PREF_OFF=[]; const ALL=[];
+JP.forEach((p,pi)=>{PREF_OFF.push(ALL.length);p.cities.forEach((c,ci)=>ALL.push({name:c,pref:p.name,pi,ci}))});
+/* 専用コンテンツがある町（単語セット・ご当地ボス・おとも） */
+const SPECIAL={
+ "潮来市":{icon:"🌾",desc:"水郷の町。あやめと舟運で栄えた、旅の始まりにぴったりの場所。",boss:{face:"🦆",name:"水郷の番人 カモ将軍",taunt:"「この関所を通りたければ、覚えた単語のスペルを見せてみよ！」"},
+  words:[
+   {en:"library",jp:"図書館",pos:"名詞",phon:"/ ˈlaɪbrəri /",ex:"I go to the library after school.（放課後、図書館へ行きます）"},
+   {en:"journey",jp:"旅、旅行",pos:"名詞",phon:"/ ˈdʒɜːrni /",ex:"Our journey starts today.（私たちの旅は今日始まります）"},
+   {en:"river",jp:"川",pos:"名詞",phon:"/ ˈrɪvər /",ex:"The river is wide.（その川は広いです）"},
+   {en:"beautiful",jp:"美しい",pos:"形容詞",phon:"/ ˈbjuːtɪfl /",ex:"The flowers are beautiful.（花が美しいです）"},
+   {en:"begin",jp:"始める、始まる",pos:"動詞",phon:"/ bɪˈɡɪn /",ex:"Let's begin the game.（ゲームを始めましょう）"}]},
+ "鹿嶋市":{icon:"⚽",desc:"鹿島神宮とサッカーの町。武道の神様が眠る関所。",boss:{face:"🦌",name:"神宮の守り鹿 シカ殿",taunt:"「鹿島の関所は甘くないぞ。スペルで勝負だ！」"},
+  words:[
+   {en:"strong",jp:"強い",pos:"形容詞",phon:"/ strɔːŋ /",ex:"He is a strong player.（彼は強い選手です）"},
+   {en:"practice",jp:"練習する",pos:"動詞",phon:"/ ˈpræktɪs /",ex:"We practice soccer every day.（毎日サッカーを練習します）"},
+   {en:"team",jp:"チーム",pos:"名詞",phon:"/ tiːm /",ex:"Our team won the game.（私たちのチームが勝ちました）"},
+   {en:"famous",jp:"有名な",pos:"形容詞",phon:"/ ˈfeɪməs /",ex:"This shrine is famous.（この神社は有名です）"},
+   {en:"win",jp:"勝つ",pos:"動詞",phon:"/ wɪn /",ex:"I want to win.（勝ちたいです）"}]},
+ "成田市":{icon:"✈️",desc:"成田山新勝寺と国際空港。世界への玄関口。",boss:{face:"🦅",name:"空の門番 ワシ蔵",taunt:"「世界へ飛び立つ前に、スペルの最終チェックだ！」"},
+  words:[
+   {en:"airport",jp:"空港",pos:"名詞",phon:"/ ˈeərpɔːrt /",ex:"The airport is busy.（空港は混んでいます）"},
+   {en:"passport",jp:"パスポート",pos:"名詞",phon:"/ ˈpæspɔːrt /",ex:"Show me your passport.（パスポートを見せてください）"},
+   {en:"foreign",jp:"外国の",pos:"形容詞",phon:"/ ˈfɔːrən /",ex:"I like foreign movies.（外国の映画が好きです）"},
+   {en:"arrive",jp:"到着する",pos:"動詞",phon:"/ əˈraɪv /",ex:"We arrive at 9.（9時に到着します）"},
+   {en:"ticket",jp:"切符、チケット",pos:"名詞",phon:"/ ˈtɪkɪt /",ex:"I have two tickets.（チケットを2枚持っています）"}]},
+ "千代田区":{icon:"🗼",desc:"日本の首都・東京のど真ん中。皇居と丸の内が広がる、巨大都市の心臓部。",boss:{face:"🦉",name:"都庁の知恵者 フクロウ博士",taunt:"「首都の関所、知識の総仕上げといこう」"},
+  words:[
+   {en:"capital",jp:"首都",pos:"名詞",phon:"/ ˈkæpɪtl /",ex:"Tokyo is the capital of Japan.（東京は日本の首都です）"},
+   {en:"crowded",jp:"混雑した",pos:"形容詞",phon:"/ ˈkraʊdɪd /",ex:"The train is crowded.（電車が混んでいます）"},
+   {en:"museum",jp:"博物館・美術館",pos:"名詞",phon:"/ mjuˈziːəm /",ex:"Let's visit the museum.（博物館へ行きましょう）"},
+   {en:"decide",jp:"決める",pos:"動詞",phon:"/ dɪˈsaɪd /",ex:"I decided to study English.（英語を勉強すると決めました）"},
+   {en:"future",jp:"未来、将来",pos:"名詞",phon:"/ ˈfjuːtʃər /",ex:"Think about your future.（将来について考えよう）"}]},
+};
+/* 専用単語のない町むけ共通単語プール（町ごとに決まった5語が出題される） */
+const WORD_POOL=[
+ {en:"school",jp:"学校",pos:"名詞",phon:"/ skuːl /",ex:"I go to school by bike.（自転車で学校へ行きます）"},
+ {en:"friend",jp:"友達",pos:"名詞",phon:"/ frend /",ex:"She is my best friend.（彼女は一番の友達です）"},
+ {en:"family",jp:"家族",pos:"名詞",phon:"/ ˈfæməli /",ex:"I love my family.（家族が大好きです）"},
+ {en:"morning",jp:"朝",pos:"名詞",phon:"/ ˈmɔːrnɪŋ /",ex:"I get up early in the morning.（朝早く起きます）"},
+ {en:"station",jp:"駅",pos:"名詞",phon:"/ ˈsteɪʃn /",ex:"The station is near my house.（駅は家の近くです）"},
+ {en:"mountain",jp:"山",pos:"名詞",phon:"/ ˈmaʊntn /",ex:"That mountain is very high.（あの山はとても高いです）"},
+ {en:"sea",jp:"海",pos:"名詞",phon:"/ siː /",ex:"We swim in the sea.（海で泳ぎます）"},
+ {en:"sky",jp:"空",pos:"名詞",phon:"/ skaɪ /",ex:"The sky is blue today.（今日は空が青いです）"},
+ {en:"happy",jp:"うれしい、幸せな",pos:"形容詞",phon:"/ ˈhæpi /",ex:"I am happy to see you.（会えてうれしいです）"},
+ {en:"busy",jp:"忙しい",pos:"形容詞",phon:"/ ˈbɪzi /",ex:"My father is busy today.（父は今日忙しいです）"},
+ {en:"enjoy",jp:"楽しむ",pos:"動詞",phon:"/ ɪnˈdʒɔɪ /",ex:"I enjoy playing tennis.（テニスをするのが楽しいです）"},
+ {en:"visit",jp:"訪れる",pos:"動詞",phon:"/ ˈvɪzɪt /",ex:"We visit Kyoto every year.（毎年京都を訪れます）"},
+ {en:"speak",jp:"話す",pos:"動詞",phon:"/ spiːk /",ex:"Can you speak English?（英語を話せますか？）"},
+ {en:"study",jp:"勉強する",pos:"動詞",phon:"/ ˈstʌdi /",ex:"I study math every day.（毎日数学を勉強します）"},
+ {en:"always",jp:"いつも",pos:"副詞",phon:"/ ˈɔːlweɪz /",ex:"He is always kind.（彼はいつも優しいです）"},
+ {en:"often",jp:"よく、しばしば",pos:"副詞",phon:"/ ˈɔːfn /",ex:"I often read books.（よく本を読みます）"},
+ {en:"question",jp:"質問",pos:"名詞",phon:"/ ˈkwestʃən /",ex:"I have a question.（質問があります）"},
+ {en:"answer",jp:"答える",pos:"動詞",phon:"/ ˈænsər /",ex:"Please answer in English.（英語で答えてください）"},
+ {en:"important",jp:"大切な、重要な",pos:"形容詞",phon:"/ ɪmˈpɔːrtnt /",ex:"Health is important.（健康は大切です）"},
+ {en:"delicious",jp:"おいしい",pos:"形容詞",phon:"/ dɪˈlɪʃəs /",ex:"This cake is delicious.（このケーキはおいしいです）"},
+ {en:"local",jp:"地元の",pos:"形容詞",phon:"/ ˈloʊkl /",ex:"I like local food.（地元の食べ物が好きです）"},
+ {en:"festival",jp:"祭り",pos:"名詞",phon:"/ ˈfestɪvl /",ex:"The summer festival is fun.（夏祭りは楽しいです）"},
+ {en:"souvenir",jp:"お土産",pos:"名詞",phon:"/ ˌsuːvəˈnɪr /",ex:"I bought a souvenir for my mother.（母にお土産を買いました）"},
+ {en:"map",jp:"地図",pos:"名詞",phon:"/ mæp /",ex:"Let's look at the map.（地図を見ましょう）"},
+];
+const ALLWORDS=[...Object.values(SPECIAL).flatMap(s=>s.words),...WORD_POOL];
+const TOWN_ICONS=["🏘️","🌾","🏯","⛩️","🌊","⛰️","🍜","🌸","🚉","🏖️"];
+const BOSS_SET=[["👺","てんぐ様"],["🦊","キツネのコン吉"],["🐗","イノシシ武者"],["🐻","クマの権兵衛"],["🐲","リュウの子"],["🦑","タコ入道"],["🐺","オオカミ番長"],["🦝","タヌキ大将"]];
+/* 旅の何歩目か → その町のデータ（始まりの地から日本全国を順に進み、最後は最初へ戻る） */
+function townAt(step){
+ const idx=((S.startIdx+step)%ALL.length+ALL.length)%ALL.length;
+ const base=ALL[idx]; const sp=SPECIAL[base.name];
+ if(sp)return {flat:idx,pi:base.pi,name:base.name,pref:base.pref,icon:sp.icon,desc:sp.desc,boss:sp.boss,words:sp.words,special:true};
+ const off=(idx*7)%WORD_POOL.length;
+ const words=[0,1,2,3,4].map(k=>WORD_POOL[(off+k*5)%WORD_POOL.length]);
+ const b=BOSS_SET[idx%BOSS_SET.length];
+ return {flat:idx,pi:base.pi,name:base.name,pref:base.pref,icon:TOWN_ICONS[idx%TOWN_ICONS.length],
+  desc:base.pref+"の"+base.name+"。ご当地の風を感じながら、英語の関所に挑もう。",
+  boss:{face:b[0],name:base.name+"の関所番 "+b[1],taunt:"「"+base.name+"の関所を通りたければ、覚えた単語のスペルを見せてみよ！」"},
+  words,special:false};
+}
+const PETS=[
+ {icon:"🦆",name:"あやめカモ",town:"潮来市",skill:"選択肢ヒント",desc:"潮来の水郷で出会ったカモ。クイズで選択肢を消すのが得意。",owned:false},
+ {icon:"🦌",name:"神宮シカ",town:"鹿嶋市",skill:"ライフ回復",desc:"鹿島神宮の鹿。ボス戦でピンチのとき回復してくれるかも。",owned:false},
+ {icon:"🦅",name:"成田ワシ",town:"成田市",skill:"発音マスター",desc:"空港を見守るワシ。発音ヒントを正確に届けてくれる。",owned:false},
+ {icon:"🦉",name:"博士フクロウ",town:"千代田区",skill:"経験値アップ",desc:"知識のフクロウ。正解時のコインが少し増える。",owned:false},
+];
+const SHOP=[
+ {icon:"🎩",name:"旅人の帽子",desc:"相棒の着せ替え。冒険者気分がアップ！",price:80,key:"hat"},
+ {icon:"🧣",name:"赤いマフラー",desc:"相棒の着せ替え。写真映えバツグン。",price:120,key:"scarf"},
+ {icon:"💊",name:"ヒント薬 ×1",desc:"ボス戦で最初の2文字まで教えてくれる。",price:50,key:"hint"},
+ {icon:"🍙",name:"おにぎり（スタミナ+2）",desc:"お土産にも使える。スタミナが2回復。",price:40,key:"onigiri"},
+ {icon:"🎫",name:"復習パス",desc:"復習クエストを今すぐ1回追加で受けられる。",price:60,key:"pass"},
+];
+const GRAMMAR={
+ "be動詞":[
+  {f:"I <span class='hl'>am</span> / You <span class='hl'>are</span> / He <span class='hl'>is</span>",p:"be動詞は主語で形が変わる3兄弟。am は I 専用、are は You と複数、is は He / She / It と単数。"},
+  {f:"I am a student. ＝ 私は生徒です",p:"be動詞は「＝（イコール）」の役割。主語と後ろの言葉をイコールでつなぐイメージで覚えよう。"},
+  {f:"I am <span class='hl'>not</span> tired. / <span class='hl'>Are</span> you OK?",p:"否定は be動詞の後ろに not、疑問は be動詞を先頭へ。動かすのは be動詞だけ、シンプル！"}],
+ "一般動詞":[
+  {f:"I <span class='hl'>play</span> soccer.（現在）",p:"一般動詞は「動き・状態」を表す言葉。ふだんの習慣は現在形でそのまま使う。"},
+  {f:"He play<span class='hl'>s</span> soccer. ← 三単現の s",p:"主語が He / She / It（三人称単数）で現在形のとき、動詞に s がつく。いちばんテストに出るポイント！"},
+  {f:"I <span class='hl'>played</span> soccer yesterday.",p:"過去のことは過去形。規則動詞は -ed、不規則動詞（go→went など）は形ごと覚える。"}],
+ "不定詞":[
+  {f:"I want <span class='hl'>to play</span> soccer.",p:"「to＋動詞の原形」でひとかたまり。want to〜 ＝ 〜したい、という気持ちを表す。"},
+  {f:"I study <span class='hl'>to pass</span> the test.",p:"目的用法：「〜するために」。文の後ろに置いて、前の行動の目的を説明する。"},
+  {f:"I have a book <span class='hl'>to read</span>.",p:"形容詞用法：「〜するための」。名詞の後ろに置いて、その名詞を説明する。"}],
+ "現在完了":[
+  {f:"I <span class='hl'>have lived</span> here for 3 years.",p:"have＋過去分詞。「ずっと〜している」継続は、過去から今まで線がつながっているイメージ。"},
+  {f:"I <span class='hl'>have been</span> to Kyoto.",p:"経験用法：「〜したことがある」。been to〜 で「行ったことがある」の定番フレーズ。"},
+  {f:"I <span class='hl'>have just finished</span> my homework.",p:"完了用法：「ちょうど〜し終えた」。just（ちょうど）や already（もう）と一緒によく使う。"}],
+};
+/* ================= STATE ================= */
+const S={startIdx:Math.max(0,ALL.findIndex(t=>t.name==="潮来市")),goal:"balance",pet:"dog",townIdx:0,coins:120,stamina:5,level:1,conquered:[],mastered:0,skillLeft:2,items:{},accessory:"",raid:0};
+let quiz={list:[],i:0,hearts:3,answered:false,lastWord:null};
+let boss={list:[],i:0,hp:3,meHp:3};
+let reviewList=[];
+const $=id=>document.getElementById(id);
+const petFace=()=>S.pet==="dog"?"🐶":"🐱";
+const petName=()=>S.pet==="dog"?"ポチ丸":"ミケ";
+const petLine=(arr)=>arr[Math.floor(Math.random()*arr.length)];
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2600)}
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));$(id).classList.add("on");window.scrollTo({top:0})}
+function syncTop(){$("coins").textContent=S.coins;$("level").textContent=S.level;$("stamina").textContent=S.stamina;$("topPet").textContent=petFace()+(S.accessory||"");$("shopCoins").textContent=S.coins}
+function speak(text){try{const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.88;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast("この端末では音声が使えませんでした")}}
+/* ================= SETUP ================= */
+let selPref=Math.max(0,JP.findIndex(p=>p.name==="茨城県"));
+function townBtnHTML(t,flat,showPref){
+ const sp=SPECIAL[t.name];
+ const right=`<span class="tright">${showPref?`<small>${t.pref}</small>`:""}${sp?'<span class="sp">⭐ 専用ボス</span>':""}</span>`;
+ return `<button class="townopt ${flat===S.startIdx?"sel":""}" data-flat="${flat}"><span>${sp?sp.icon:TOWN_ICONS[flat%TOWN_ICONS.length]}</span><b>${t.name}</b>${right}</button>`;
+}
+function renderTownList(){
+ const q=$("townSearch").value.trim(); let html="";
+ if(q){
+  const hits=[]; ALL.forEach((t,i)=>{if(t.name.includes(q)&&hits.length<60)hits.push([t,i])});
+  html=hits.length?hits.map(([t,i])=>townBtnHTML(t,i,true)).join(""):`<p class="small" style="padding:6px">「${q}」に一致する市町村が見つかりませんでした。</p>`;
+ }else{
+  const off=PREF_OFF[selPref];
+  html=JP[selPref].cities.map((c,ci)=>townBtnHTML(ALL[off+ci],off+ci,false)).join("");
+ }
+ $("townList").innerHTML=html;
+ document.querySelectorAll("[data-flat]").forEach(b=>b.onclick=()=>{S.startIdx=+b.dataset.flat;renderTownList()});
+ renderStartSummary();
+}
+function renderStartSummary(){
+ const t=townAt(0);
+ $("startSummary").innerHTML=`<b style="font-size:16px">${t.icon} ${t.name}（${t.pref}）から出発</b><p class="small" style="margin-top:5px">${t.desc}</p>${t.special?'<p class="small" style="margin-top:5px">⭐ この町には専用の単語セットとご当地ボス、おともがいます。</p>':""}<p class="small" style="margin-top:5px">制覇すると同じ都道府県の次の市町村へ進み、日本全国を順に旅していきます。</p>`;
+}
+$("prefSel").innerHTML=JP.map((p,i)=>`<option value="${i}" ${i===selPref?"selected":""}>${p.name}（${p.cities.length}市町村）</option>`).join("");
+$("prefSel").onchange=()=>{selPref=+$("prefSel").value;$("townSearch").value="";renderTownList()};
+$("townSearch").addEventListener("input",renderTownList);
+$("totalCount").textContent=ALL.length.toLocaleString();
+$("heroTotal").textContent=ALL.length.toLocaleString();
+renderTownList();
+document.querySelectorAll("[data-goal]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-goal]").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");S.goal=b.dataset.goal});
+document.querySelectorAll("[data-pet]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-pet]").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");S.pet=b.dataset.pet;syncTop()});
+$("startBtn").onclick=()=>{S.townIdx=0;S.conquered=[];$("footbar").style.display="block";syncTop();renderMap();show("scr-map");toast(`${ALL[S.startIdx].name}から冒険スタート！`)};
+
+/* ================= MAP ================= */
+function renderMap(){
+ const next=townAt(S.townIdx);
+ let nodes="";
+ for(let s=Math.max(0,S.townIdx-2);s<=S.townIdx+3;s++){
+  const t=townAt(s);
+  const st=s<S.townIdx?"done":(s===S.townIdx?"now":"");
+  const label=s<S.townIdx?"制覇済み✓":(s===S.townIdx?"現在地":"この先");
+  nodes+=`<div class="node ${st}"><div class="dot">${s<S.townIdx?"✓":t.icon}</div><b>${t.name}</b><small>${t.pref}</small><span class="st">${label}</span></div>`;
+ }
+ $("route").innerHTML=nodes;
+ $("mapTitle").innerHTML=`🗾 旅のマップ <span style="font-size:12px;color:var(--ink2)">— 現在：${next.pref} ${next.name}</span>`;
+ const pc=S.conquered.filter(f=>ALL[f].pi===next.pi).length;
+ $("mapProgress").textContent=`日本制覇まで ${S.conquered.length} / ${ALL.length.toLocaleString()} 市町村 ・ ${next.pref}は ${pc} / ${JP[next.pi].cities.length} 制覇`;
+ $("mapPet").textContent=petFace()+(S.accessory||"");
+ $("mapSpeech").innerHTML=S.conquered.length===0
+  ? `<b>${petName()}：</b>わくわくするね！ まずは<b>${next.name}</b>を目指そう。道中クイズで単語を覚えて、関所のボスを倒せば制覇だよ！`
+  : `<b>${petName()}：</b>やるね、${S.conquered.length}つの町を制覇したよ！ 次は<b>${next.name}</b>（${next.pref}）。この調子で日本制覇、そして世界へ！`;
+ $("stTowns").textContent=S.conquered.length;
+ $("stWords").textContent=S.conquered.length*5+S.mastered;
+ $("nextTownName").textContent=next.name+" "+next.icon;
+ $("nextTownDesc").textContent=next.desc+" この町の単語5つを覚えて、関所ボス「"+next.boss.name+"」を倒そう。";
+ $("reviewCount").textContent=reviewList.length;
+ syncTop();
+}
+
+/* ================= QUIZ ================= */
+function shuffle(a){return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1])}
+function startQuiz(){
+ if(S.stamina<=0){toast("スタミナ切れ… おにぎりを買うか、少し休もう（ショップへ）");openModal("shop");return}
+ S.stamina--; S.skillLeft=2; $("skillLeft").textContent=2; syncTop();
+ quiz={list:shuffle([...townAt(S.townIdx).words]),i:0,hearts:3,answered:false,lastWord:null};
+ show("scr-quiz"); renderQ();
+}
+function renderQ(){
+ const w=quiz.list[quiz.i]; quiz.lastWord=w; quiz.answered=false;
+ $("quizStepLabel").textContent=`道中クイズ ${quiz.i+1} / ${quiz.list.length}`;
+ $("quizProg").style.width=(quiz.i/quiz.list.length*100)+"%";
+ $("quizHearts").textContent="❤️".repeat(quiz.hearts)+"🖤".repeat(3-quiz.hearts);
+ $("quizRouteLabel").textContent=`🚶 ${townAt(S.townIdx).name}への道中… あと ${quiz.list.length-quiz.i} 問で関所に到着`;
+ $("quizPet").textContent=petFace()+(S.accessory||"");
+ $("quizSpeech").innerHTML=`<b>${petName()}：</b>`+petLine(["この単語、テストでもよく見るよ！","音も一緒に覚えると強いよ。発音ボタン押してみて！","焦らなくてOK。意味をイメージしてみよう。","おともスキルもあるから、困ったら使ってね。"]);
+ $("qPos").textContent=w.pos; $("qWord").textContent=w.en; $("qPhon").textContent=w.phon;
+ const all=ALLWORDS.filter(x=>x.en!==w.en);
+ const opts=shuffle([w,...shuffle(all).slice(0,3)]);
+ $("choices").innerHTML=opts.map((o,idx)=>`<button class="choice" data-en="${o.en}"><span class="k">${"ABCD"[idx]}</span>${o.jp}</button>`).join("");
+ $("feedback").className="feedback"; $("nextQBtn").style.display="none"; $("skillBtn").disabled=false;
+ document.querySelectorAll(".choice").forEach(c=>c.onclick=()=>answer(c,w));
+}
+function answer(c,w){
+ if(quiz.answered)return; quiz.answered=true;
+ const ok=c.dataset.en===w.en;
+ document.querySelectorAll(".choice").forEach(x=>{if(x.dataset.en===w.en)x.classList.add("ok")});
+ const fb=$("feedback");
+ if(ok){S.coins+=10;S.raid++;fb.className="feedback show ok";fb.innerHTML=`<b>⭕ 正解！ +10コイン</b><br>${w.en} ＝ ${w.jp}<br><span class="en">${w.ex}</span>`;speak(w.en)}
+ else{c.classList.add("ng");quiz.hearts--;$("quizHearts").textContent="❤️".repeat(Math.max(0,quiz.hearts))+"🖤".repeat(3-Math.max(0,quiz.hearts));fb.className="feedback show ng";fb.innerHTML=`<b>❌ おしい！</b> 正解は「${w.jp}」。<br><span class="en">${w.ex}</span><br>間違えた単語は復習クエストに出やすくなるよ。`}
+ syncTop();
+ const nb=$("nextQBtn"); nb.style.display="block";
+ nb.textContent=quiz.i>=quiz.list.length-1?"⚔️ 関所ボス戦へ進む":"次へ進む ▶";
+ if(quiz.hearts<=0){nb.textContent="💦 力尽きた…マップへ戻る"}
+}
+$("nextQBtn").onclick=()=>{
+ if(quiz.hearts<=0){S.stamina=Math.min(5,S.stamina+1);renderMap();show("scr-map");toast("スタミナが少し回復したよ。単語を見直して再挑戦！");return}
+ quiz.i++;
+ if(quiz.i>=quiz.list.length){startBoss()}else{renderQ()}
+};
+$("skillBtn").onclick=()=>{
+ if(S.skillLeft<=0||quiz.answered)return; S.skillLeft--; $("skillLeft").textContent=S.skillLeft;
+ const w=quiz.list[quiz.i]; let hidden=0;
+ document.querySelectorAll(".choice").forEach(c=>{if(c.dataset.en!==w.en&&hidden<2){c.classList.add("hide");hidden++}});
+ $("quizSpeech").innerHTML=`<b>${petName()}：</b>おともスキル発動！ 選択肢を2つ消したよ。あとは二択だ！`;
+ if(S.skillLeft<=0)$("skillBtn").disabled=true;
+};
+$("speakBtn").onclick=()=>speak(quiz.list[quiz.i].en);
+$("quitQuiz").onclick=()=>{renderMap();show("scr-map")};
+$("departBtn").onclick=startQuiz;
+/* ================= BOSS ================= */
+function startBoss(){
+ const t=townAt(S.townIdx);
+ boss={list:shuffle([...t.words]).slice(0,3),i:0,hp:3,meHp:3};
+ $("bossFace").textContent=t.boss.face; $("bossName").textContent=t.boss.name; $("bossTaunt").textContent=t.boss.taunt;
+ show("scr-boss"); renderBoss();
+}
+function hintOf(w){return w.en[0]+" "+"_ ".repeat(Math.max(0,w.en.length-2)).trim()+(w.en.length>1?" "+w.en[w.en.length-1]:"")}
+function renderBoss(){
+ const w=boss.list[boss.i];
+ $("bossHp").style.width=(boss.hp/3*100)+"%"; $("meHp").style.width=(boss.meHp/3*100)+"%";
+ $("bossHearts").textContent="❤️".repeat(Math.max(0,boss.meHp))+"🖤".repeat(3-Math.max(0,boss.meHp));
+ $("bossJp").textContent=w.jp; $("bossHint").textContent=hintOf(w); $("bossPhon").textContent=w.phon+" ・ "+w.pos;
+ $("spellInput").value=""; $("bossFeedback").className="feedback";
+ setTimeout(()=>$("spellInput").focus(),80);
+}
+function attack(){
+ const w=boss.list[boss.i]; const v=$("spellInput").value.trim().toLowerCase(); if(!v)return;
+ const fb=$("bossFeedback");
+ if(v===w.en.toLowerCase()){
+  boss.hp--; fb.className="feedback show ok"; fb.innerHTML=`<b>⚔️ 会心の一撃！</b> ${w.en} 正解！ <span class="en">${w.ex}</span>`; speak(w.en);
+  $("bossHp").style.width=(Math.max(0,boss.hp)/3*100)+"%";
+  if(boss.hp<=0){winTown();return}
+  boss.i++; setTimeout(renderBoss,1100);
+ }else{
+  boss.meHp--; $("spellWrap").classList.remove("shake"); void $("spellWrap").offsetWidth; $("spellWrap").classList.add("shake");
+  fb.className="feedback show ng";
+  fb.innerHTML=boss.meHp>0?`<b>💥 ミス！</b> スペルをよく見直してみよう。ヒント：<span class="en">${hintOf(w)}</span>（${w.en.length}文字）`:`<b>💦 敗北…</b> 道中クイズで単語を見直してから再挑戦しよう。`;
+  $("meHp").style.width=(Math.max(0,boss.meHp)/3*100)+"%"; $("bossHearts").textContent="❤️".repeat(Math.max(0,boss.meHp))+"🖤".repeat(3-Math.max(0,boss.meHp));
+  if(boss.meHp<=0){setTimeout(()=>{renderMap();show("scr-map");toast("ボスに負けちゃった…単語を復習して再挑戦！")},1400)}
+ }
+}
+$("attackBtn").onclick=attack;
+$("spellInput").addEventListener("keydown",e=>{if(e.key==="Enter")attack()});
+$("bossSpeak").onclick=()=>{if(boss.list[boss.i])speak(boss.list[boss.i].en)};
+$("quitBoss").onclick=()=>{renderMap();show("scr-map")};
+function winTown(){
+ const t=townAt(S.townIdx); const gain=50+quiz.hearts*10;
+ S.coins+=gain; if(!S.conquered.includes(t.flat))S.conquered.push(t.flat);
+ const pet=PETS.find(p=>p.town===t.name); let petTxt="—";
+ if(pet&&!pet.owned){pet.owned=true;petTxt=pet.icon+" "+pet.name}
+ reviewList.push(...t.words.slice(0,2));
+ S.level=1+S.conquered.length;
+ S.townIdx++;
+ $("clearTown").textContent=t.name; $("clearCoins").textContent="+"+gain; $("clearWords").textContent=t.words.length; $("clearPet").textContent=petTxt;
+ $("clearMsg").innerHTML=petTxt!=="—"?`関所ボスを倒して <b>${t.name}</b> を制覇！ ご当地のおとも <b>${petTxt}</b> が仲間になったよ。スキル「${pet.skill}」が使えるようになった！`:`関所ボスを倒して <b>${t.name}</b> を制覇！ 次の町へ進めるようになったよ。`;
+ syncTop(); show("scr-clear");
+}
+$("backMapBtn").onclick=()=>{renderMap();show("scr-map")};
+/* ================= REVIEW ================= */
+$("reviewBtn").onclick=()=>{
+ const b=$("reviewBody");
+ if(reviewList.length===0){b.innerHTML=`<div class="card" style="text-align:center"><div style="font-size:36px">🌿</div><p class="sub">今は復習クエストがありません。町を制覇すると、忘却曲線に合わせて自動で届きます。</p></div>`}
+ else{
+  const w=reviewList[0];
+  b.innerHTML=`<div class="card" style="text-align:center"><p class="sub">残り ${reviewList.length} 件 ／ スペルを入力してね</p><div style="font-size:22px;font-weight:900;margin-top:6px">${w.jp}</div><div class="hint en" style="font-size:22px">${hintOf(w)}</div>
+  <div class="spellin"><input id="revInput" class="en" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="スペルを入力…"><button class="btn btn-teal" id="revBtn" style="width:auto;padding:12px 18px">判定</button></div>
+  <div class="feedback" id="revFb"></div></div>`;
+  $("revBtn").onclick=()=>{
+   const fb=$("revFb");
+   if($("revInput").value.trim().toLowerCase()===w.en.toLowerCase()){reviewList.shift();S.mastered++;S.coins+=15;syncTop();fb.className="feedback show ok";fb.innerHTML=`<b>🎉 完全定着に一歩！ +15コイン</b><br><span class="en">${w.ex}</span>`;setTimeout(()=>$("reviewBtn").click(),1300)}
+   else{fb.className="feedback show ng";fb.innerHTML=`<b>おしい！</b> 正解は <span class="en"><b>${w.en}</b></span>。もう一度見て覚え直そう。`}
+  };
+ }
+ openModal("review");
+};
+/* ================= MODALS / SHOP / PETS / GRAMMAR / CHAT ================= */
+function openModal(name){document.querySelectorAll(".overlay").forEach(o=>o.classList.remove("on"));const el=$("ov-"+name);if(el)el.classList.add("on");if(name==="shop")renderShop();if(name==="pets")renderPets();if(name==="chat")renderChat()}
+function closeModals(){document.querySelectorAll(".overlay").forEach(o=>o.classList.remove("on"))}
+document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openModal(b.dataset.open));
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=closeModals);
+document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)closeModals()}));
+document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>{renderMap();show("scr-map")});
+function renderShop(){
+ syncTop();
+ $("shopList").innerHTML=SHOP.map((it,i)=>{
+  const owned=it.key==="hat"&&S.accessory==="🎩"||it.key==="scarf"&&S.accessory==="🧣";
+  const dis=S.coins<it.price||owned;
+  return `<div class="shopitem"><span class="ic">${it.icon}</span><span style="flex:1"><b>${it.name}</b><small>${it.desc}</small></span><button class="buybtn" data-buy="${i}" ${dis?"disabled":""}>${owned?"着用中":"🪙 "+it.price}</button></div>`}).join("");
+ document.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>{
+  const it=SHOP[+b.dataset.buy]; if(S.coins<it.price)return; S.coins-=it.price;
+  if(it.key==="hat")S.accessory="🎩"; if(it.key==="scarf")S.accessory="🧣";
+  if(it.key==="onigiri"){S.stamina=Math.min(9,S.stamina+2);toast("スタミナが2回復！")}
+  if(it.key==="hint"){S.items.hint=(S.items.hint||0)+1;toast("ヒント薬を手に入れた！")}
+  if(it.key==="pass"){const t=townAt(Math.max(0,S.townIdx-1));reviewList.push(t.words[0]);toast("復習クエストが追加されたよ")}
+  if(it.key==="hat"||it.key==="scarf")toast("相棒が着せ替えしたよ！かわいい！");
+  syncTop(); renderShop();
+ });
+}
+function renderPets(){
+ $("petList").innerHTML=
+  `<div class="petitem"><span class="ic">${petFace()}</span><span><b>${petName()}（AI相棒）</b><small>いつも一緒。チャットで質問に答えてくれる、旅のパートナー。</small></span><span class="badge-n" style="background:var(--teal)">相棒</span></div>`
+  +PETS.map(p=>`<div class="petitem" style="${p.owned?"":"opacity:.55"}"><span class="ic">${p.icon}</span><span><b>${p.name} <small style="display:inline">／ ${p.town}</small></b><small>${p.desc}</small><small><b>スキル：</b>${p.skill}</small></span>${p.owned?'<span class="badge-n" style="background:var(--teal)">仲間</span>':'<span class="badge-n" style="background:#9aa">未発見</span>'}</div>`).join("");
+}
+/* grammar */
+let gTopic="be動詞",gIdx=0;
+function renderGrammar(){
+ $("gTopics").innerHTML=Object.keys(GRAMMAR).map(k=>`<button class="btn ${k===gTopic?"btn-teal":"btn-ghost"} btn-sm" data-gt="${k}">${k}</button>`).join("");
+ document.querySelectorAll("[data-gt]").forEach(b=>b.onclick=()=>{gTopic=b.dataset.gt;gIdx=0;renderGrammar()});
+ const s=GRAMMAR[gTopic][gIdx];
+ $("gSlide").innerHTML=`<div class="formula en" style="font-family:'M PLUS Rounded 1c'">${s.f}</div><p>${s.p}</p><small style="color:var(--ink2);font-weight:800">${gTopic} ｜ ${gIdx+1} / ${GRAMMAR[gTopic].length} 枚</small>`;
+ $("gDots").innerHTML=GRAMMAR[gTopic].map((_,i)=>`<i class="${i===gIdx?"on":""}"></i>`).join("");
+}
+$("gPrev").onclick=()=>{gIdx=Math.max(0,gIdx-1);renderGrammar()};
+$("gNext").onclick=()=>{gIdx=Math.min(GRAMMAR[gTopic].length-1,gIdx+1);renderGrammar()};
+renderGrammar();
+/* chat */
+function renderChat(){
+ $("chatTitle").textContent=`💬 ${petName()}に質問`;
+ if($("chatLog").children.length===0){
+  $("chatLog").innerHTML=`<div class="msg pet">${petFace()} こんにちは！ わからない所があったら何でも聞いてね。今の旅の単語や文法なら、文脈つきで説明するよ。</div>`;
+ }
+}
+document.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{
+ const q=b.dataset.q; const log=$("chatLog");
+ const labels={last:"さっきの単語を説明して",be:"be動詞と一般動詞の違いは？",study:"効率のいい覚え方は？",motivate:"やる気が出ない…"};
+ log.innerHTML+=`<div class="msg me">${labels[q]}</div>`;
+ let ans="";
+ if(q==="last"){const w=quiz.lastWord||townAt(S.townIdx).words[0];ans=`${petFace()} 「<b class="en">${w.en}</b>」は${w.jp}（${w.pos}）だよ。例文：<span class="en">${w.ex}</span> ポイントは、声に出して3回読む＋例文ごと覚えること。これでボス戦のスペルも思い出しやすくなるよ！`}
+ if(q==="be")ans=`${petFace()} いい質問！ <b>be動詞</b>は「＝」でつなぐ言葉（I am a student.＝私は生徒）。<b>一般動詞</b>は「動き」を表す言葉（I play soccer.）。迷ったら「＝で言える？ 動きがある？」で見分けてみて。文法ガイドにも図解があるよ📘`;
+ if(q==="study")ans=`${petFace()} おすすめはこのアプリの流れそのもの！ ①4択で意味を「認識」→ ②スペル入力で「定着」→ ③忘れた頃に復習で「完全マスター」。1日5分でも毎日続ける方が、週末に3時間より効くよ。`;
+ if(q==="motivate")ans=`${petFace()} そんな日もあるよね。今日は「1問だけ」でOKにしよう。小さく始めるのが続けるコツ。…ほら、1問解いたらもう今日のノルマ達成だよ。えらい！`;
+ log.innerHTML+=`<div class="msg pet">${ans}</div>`; log.scrollTop=log.scrollHeight;
+});
+syncTop();
+</script>
+</body>
+</html>
